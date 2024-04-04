@@ -1,10 +1,18 @@
+const port_num=8000
+
+const userRouter= require("./router/user")
 const express = require('express')
 const app = express()
 
-app.listen(8080, () => {
-    console.log('http://localhost:8080 에서 서버 실행중')
+app.set('port',port_num)
+app.use(express.json())
+app.use('/user',userRouter)
+
+
+app.use((req, res, next)=> {
+  res.status(404).json({message : 'api not found (no match entry-point)'});
 })
 
-app.get('/', (요청, 응답) => {
-  응답.send({"test":200})
-}) 
+app.listen(app.get('port'),()=>{
+  console.log('server is running on ', app.get('port'));
+})
