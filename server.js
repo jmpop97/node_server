@@ -1,8 +1,8 @@
 const port_num=8000
 
-const userRouter= require("./router/user")
 const express = require('express')
 const app = express()
+const userRouter= require("./router/user")
 
 app.set('port',port_num)
 app.use(express.json())
