@@ -1,7 +1,9 @@
 let express = require("express")
 const models = require("../models")
 const router = express.Router();
+const { Op } = require('sequelize');
 
+출처: https://inpa.tistory.com/entry/ORM-📚-시퀄라이즈-쿼리-문법 [Inpa Dev 👨‍💻:티스토리]
 router.post("",(req,res)=>{
     models.User.create(req.body)
     .then(_=>{console.log("data is created!")
@@ -85,7 +87,7 @@ router.delete("/:id",(req,res)=>{
     // id change danger
         models.User.destroy({
         where:{
-        id:req.params.id
+        id:{ [Op.gt]: 30}
     }
     })
     .then((comment)=>{console.log("data is delete")
