@@ -1,7 +1,4 @@
 const { Sequelize, Op, DataTypes } = require('sequelize');
-console.log(Sequelize)
-// console.log()
-// console.log()
 const fs = require('fs');
 const path = require('path');
 const basename = path.basename(__filename);
