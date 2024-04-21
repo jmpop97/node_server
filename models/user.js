@@ -14,14 +14,20 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    firstName: DataTypes.STRING,
-    changedName: DataTypes.STRING,
-    email: DataTypes.STRING,
-    test1: DataTypes.STRING,
-    test2: DataTypes.STRING,
-    test3: DataTypes.STRING,
-    test4: {type: DataTypes.STRING,
-    allowNull: false}
+    id:{
+    primaryKey:true,
+    type: DataTypes.STRING,
+    allowNull: false,
+    },
+    password: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    email: {
+      allowNull: false,
+      type: DataTypes.email,
+      unique:true,
+    }
   }, {
     sequelize,
     modelName: 'User',
