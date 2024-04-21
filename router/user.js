@@ -2,9 +2,12 @@ let express = require("express")
 const models = require("../models")
 const router = express.Router();
 const { Op } = require('sequelize');
+var crypto = require('crypto');
 
-출처: https://inpa.tistory.com/entry/ORM-📚-시퀄라이즈-쿼리-문법 [Inpa Dev 👨‍💻:티스토리]
+
 router.post("",(req,res)=>{
+    let body = req.body;
+    
     models.User.create(req.body)
     .then(_=>{console.log("data is created!")
     res.send({"response":200})
