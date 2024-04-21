@@ -18,7 +18,16 @@ module.exports = {
       allowNull: false,
       type: Sequelize.STRING,
       unique:true,
-    }
+    },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+
   })])
     /**
      * Add altering commands here.
@@ -29,7 +38,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    console.log("delete all , never back")
+    return queryInterface.dropTable("Users")
     /**
      * Add reverting commands here.
      *
