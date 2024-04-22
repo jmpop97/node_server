@@ -3,6 +3,7 @@ const models = require("../models")
 const router = express.Router();
 const { Op } = require('sequelize');
 const crypto = require('crypto');
+const jwt = require("jsonwebtoken")
 require('dotenv').config();
 console.log(process.env.PASSWORD_SECRET)
 
@@ -43,7 +44,7 @@ router.delete("/:id",(req,res)=>{
 function logIn(req, res) {
     let body = req.body;
     let hashpassword = crypto.pbkdf2Sync(body.password,
-        process.env.PASSWORD_SECRET + body.id + process.env.PASSWORD_SECRET,
+        process.env.PASSWORD_SECRET_STRING + body.id + process.env.PASSWORD_SECRET_STRING,
         Number(process.env.PASSWORD_SECRET), 64, 'sha512').toString('hex');
     models.User.findAll({
         attributes:["id","password"],
@@ -55,7 +56,7 @@ function logIn(req, res) {
         console.log(hashpassword)
         console.log(comment)
         if (hashpassword===comment[0].password){
-            res.send({ "response": 200, "user": comment });
+            res.send({ "response": 200, "user": jwt.sign({"email":body.id},"our_secre") });
         }
         else{
             res.send({ "response": 400, "error":"잘못된 비밀번호"});
@@ -74,7 +75,7 @@ function logIn(req, res) {
 function createUser(req,res) {
     let body = req.body;
     let hashpassword = crypto.pbkdf2Sync(body.password,
-        process.env.PASSWORD_SECRET + body.id + process.env.PASSWORD_SECRET,
+        process.env.PASSWORD_SECRET_STRING + body.id + process.env.PASSWORD_SECRET_STRING,
         Number(process.env.PASSWORD_SECRET), 64, 'sha512').toString('hex');
     let create_id = {
         "id": body.id,
@@ -87,7 +88,7 @@ function createUser(req,res) {
             res.send({ "response": 200 });
         })
         .catch(error => {
-            console.log("error");
+            console.log({"error":error});
             res.send({
                 "response": 400,
                 "error": error
@@ -102,7 +103,7 @@ function getUserTable(req,res) {
             res.send({ "response": 200, "user": comment });
         })
         .catch(error => {
-            console.log("error");
+            console.log({"error":error});
             res.send({
                 "response": 400,
                 "error": error
@@ -121,7 +122,7 @@ function getUserQuery(req, res) {
             res.send({ "response": 200, "user": comment });
         })
         .catch(error => {
-            console.log("error");
+            console.log({"error":error});
             res.send({
                 "response": 400,
                 "error": error
@@ -140,7 +141,7 @@ function patchUserId(req, res) {
             res.send({ "response": 200, "user": comment });
         })
         .catch(error => {
-            console.log("error");
+            console.log({"error":error});
             res.send({
                 "response": 400,
                 "error": error
@@ -159,7 +160,7 @@ function deleteUserId(res) {
             res.send({ "response": 200, "user": comment });
         })
         .catch(error => {
-            console.log("error");
+            console.log({"error":error});
             res.send({
                 "response": 400,
                 "error": error
