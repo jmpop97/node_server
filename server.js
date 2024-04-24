@@ -1,5 +1,5 @@
+require('dotenv').config();
 const port_num=8000
-
 const express = require('express')
 const app = express()
 const userRouter= require("./router/user")
