@@ -16,7 +16,10 @@ module.exports = {
         return result;
     },
     verify: (auth) => {
-        let [_,token]=auth.split("Bearer ")
+        let [token,_]=["",""]
+        if (auth){
+             [_,token]=auth.split("Bearer ")
+        }
         if (!token){
             return {
                 "response": 400,
