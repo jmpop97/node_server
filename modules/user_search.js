@@ -16,7 +16,7 @@ module.exports ={
             });
         });
     },
-    choice: async (res,ids)=>{
+    choice: async (ids,res)=>{
         const result = User.findAll({
             attributes:["id"],
             where: {id : ids}
@@ -31,7 +31,7 @@ module.exports ={
             });
         });
     },
-    search_init: async (res,id)=>{
+    search_init: async (id,res)=>{
         const result = User.findAll({
             attributes:["id"],
             where: {id : {[Op.startsWith] : id}}
@@ -46,7 +46,7 @@ module.exports ={
             });
         });
     },
-    search_include: async (res,id)=>{
+    search_include: async (id,res)=>{
         const result = User.findAll({
             attributes:["id"],
             where: {id : {[Op.substring] : id}}
