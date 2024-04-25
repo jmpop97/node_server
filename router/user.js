@@ -96,41 +96,30 @@ function createUser(req,res) {
         });
 }
 
-function getUserTable(req,res) {
-    models.User.findAll({})
-        .then((comment) => {
-            console.log("data is read!");
-            res.send({ "response": 200, "user": comment });
-        })
-        .catch(error => {
-            console.log({"error":error});
-            res.send({
-                "response": 400,
-                "error": error
-            });
-        });
-}
 
 function getUserQuery(req, res) {
-    var log_in_user=jwt.verify(req.headers.authorization)
-
+    jwt.verify(req.headers.authorization)
+    .then((log_in_user)=>{
     if (log_in_user.response){
         res.send(log_in_user)
         return
-    }
-    switch(req.body.type){
-        default:
-            search_user.all(res)
-            return
-        case 'choice':
-            search_user.choice(res,req.body.id)
-            return
-        case 'search_init':
-            search_user.search_init(res,req.body.id)
-            return
-        case 'search_include':
-            search_user.search_include(res,req.body.id)
-    }
+    }}
+    ).then(()=>{
+        switch(req.body.type){
+            default:
+                search_user.all(res)
+                return
+            case 'choice':
+                search_user.choice(res,req.body.id)
+                return
+            case 'search_init':
+                search_user.search_init(res,req.body.id)
+                return
+            case 'search_include':
+                search_user.search_include(res,req.body.id)
+                return
+        }
+    })
 }
 
 function patchUserId(req, res) {

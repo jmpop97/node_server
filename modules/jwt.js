@@ -15,7 +15,7 @@ module.exports = {
         };
         return result;
     },
-    verify: (auth) => {
+    verify: async (auth) => {
         let [token,_]=["",""]
         if (auth){
              [_,token]=auth.split("Bearer ")
