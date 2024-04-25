@@ -103,23 +103,22 @@ function getUserQuery(req, res) {
     if (log_in_user.response){
         res.send(log_in_user)
         return
-    }}
-    ).then(()=>{
-        switch(req.body.type){
-            default:
-                search_user.all(res)
-                return
-            case 'choice':
-                search_user.choice(res,req.body.id)
-                return
-            case 'search_init':
-                search_user.search_init(res,req.body.id)
-                return
-            case 'search_include':
-                search_user.search_include(res,req.body.id)
-                return
-        }
-    })
+    }
+    switch(req.body.type){
+        default:
+            search_user.all(res)
+            return
+        case 'choice':
+            search_user.choice(res,req.body.id)
+            return
+        case 'search_init':
+            search_user.search_init(res,req.body.id)
+            return
+        case 'search_include':
+            search_user.search_include(res,req.body.id)
+            return
+    }
+})
 }
 
 function patchUserId(req, res) {
