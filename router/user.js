@@ -4,6 +4,7 @@ const router = express.Router();
 const { Op } = require('sequelize');
 const crypto = require('crypto');
 const jwt = require("../modules/jwt")
+const search_user =require('../modules/search_user')
 
 router.post("",(req,res)=>{
     createUser(req,res);
@@ -117,23 +118,19 @@ function getUserQuery(req, res) {
         res.send(log_in_user)
         return
     }
-    console.log("work")
-    models.User.findAll({
-        attributes:["id"],
-        where: {
-            id: req.params.id,
-            
-        }
-    })
-        .then((comment) => {
-            res.send({ "response": 200, "user": comment });
-        })
-        .catch(error => {
-            console.log({"error":error});
-            res.send({
-                "response": 400,
-            });
-        });
+    switch(req.body.type){
+        default:
+            search_user.all(res)
+            return
+        case 'choice':
+            search_user.choice(res,req.body.id)
+            return
+        case 'search_init':
+            search_user.search_init(res,req.body.id)
+            return
+        case 'search_include':
+            search_user.search_include(res,req.body.id)
+    }
 }
 
 function patchUserId(req, res) {
