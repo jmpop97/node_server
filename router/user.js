@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const jwt = require("../modules/jwt")
 const search_user =require('../modules/user_search')
 const user_passward = require('../modules/user_password')
-
+const user_update = require('../modules/user_update')
 router.post("",(req,res)=>{
     //createUser
     let {id,password,email} = req.body;
@@ -51,9 +51,17 @@ router.get("/:id",(req,res)=>{
 })
 
 
-router.patch("/:id",(req,res)=>{
+router.patch("/",(req,res)=>{
     // id change danger
-        patchUserId(req, res);
+    let {type,id}=req.body
+    jwt.verify(req.headers.authorization)
+    .then((log_in_user)=>{
+    if (log_in_user.response){
+        res.send(log_in_user)
+        return
+    }
+    user_update.patch(log_in_user.id,req.body, res);
+    })
 })
 
 
@@ -64,29 +72,6 @@ router.delete("/:id",(req,res)=>{
 
 
 
-
-
-
-
-
-function patchUserId(req, res) {
-    models.User.update(req.body, {
-        where: {
-            id: req.params.id
-        }
-    })
-        .then((comment) => {
-            console.log("data is update");
-            res.send({ "response": 200, "user": comment });
-        })
-        .catch(error => {
-            console.log({"error":error});
-            res.send({
-                "response": 400,
-                "error": error
-            });
-        });
-}
 
 function deleteUserId(res) {
     models.User.destroy({
