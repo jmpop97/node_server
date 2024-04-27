@@ -1,24 +1,12 @@
 'use strict';
 
-const { DATEONLY } = require('sequelize');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('UserInfos',{
-      userId:{
-        type: Sequelize.STRING,
-        references:{
-          model:'Users',
-          key:'id'
-        },
-        primaryKey:true
-      },
-      birthDay:{
-        type:Sequelize.DATEONLY
-      },
-      intro:{
-        type:Sequelize.TEXT
+    await queryInterface.createTable('NoIds', {
+      noId:{
+        primaryKey:true,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -28,7 +16,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-    })
+    });
     /**
      * Add altering commands here.
      *
@@ -38,12 +26,12 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropAllTables('UserInfos')
     /**
      * Add reverting commands here.
      *
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.dropTable('NoIds');
   }
 };
