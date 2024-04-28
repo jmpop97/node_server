@@ -12,7 +12,8 @@ module.exports = {
           model:'Users',
           key:'id'
         },
-        primaryKey:true
+        primaryKey:true,
+        unique:true,
       },
       birthDay:{
         type:Sequelize.DATEONLY

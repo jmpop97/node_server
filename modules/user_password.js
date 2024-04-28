@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const {User} = require('../models')
+const {User,UserInfo} = require('../models')
 const jwt = require('../modules/jwt')
 module.exports = {
     logUp: async(id,password,email,res)=>{
@@ -10,16 +10,18 @@ module.exports = {
             "email": email
         };
         User.create(create_id)
-            .then(_ => {
-                console.log("data is created!");
-                res.send({ "response": 200 });
-            })
-            .catch(error => {
+        .then(_ => {
+        console.log("data is created!");
+        res.send({ "response": 200 });
+        }).then(()=>
+        UserInfo.create({"userId":id})
+        )
+        .catch(error => {
                 console.log({"error":error});
                 res.send({
                     "response": 400,
                 });
-            });
+        });
     },
     logIn: async(id,password,res)=>{
         if (!id || !password){
@@ -54,7 +56,6 @@ module.exports = {
             });
         });
     },
-
     hashPassword: async(id,password)=>{
         return crypto.pbkdf2Sync(password,
             process.env.PASSWORD_SECRET_STRING + id + process.env.PASSWORD_SECRET_STRING,
