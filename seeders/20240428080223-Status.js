@@ -3,14 +3,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-     await queryInterface.bulkInsert('Users', [{
-       id: 'user',
-       password: '1234',
-       email: "user@naver.com",
-       createdAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-        updatedAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
-     }], {});
-
+    const name=["Deactivate","Delete"]
+    var names=""
+    for(var i in name){
+        names += "('"+ name[i]+"'),"
+    }
+    await queryInterface.sequelize.query(`
+    INSERT INTO public."Status"(
+      "stateName")
+     VALUES ${names.slice(0,-1)};`
+    )
     /**
      * Add seed commands here.
      *
