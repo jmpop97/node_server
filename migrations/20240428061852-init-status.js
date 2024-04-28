@@ -5,12 +5,13 @@ const { QueryInterface } = require('sequelize');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Status', 
-    { id: {
+    await Promise.all([
+      queryInterface.createTable('Status', 
+    { stateId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
     stateName: {
       type: Sequelize.STRING,
@@ -21,7 +22,24 @@ module.exports = {
     INSERT INTO public."Status"(
       "stateName")
      VALUES ( 'Active');`
-    ))
+    )),
+      queryInterface.addColumn("Users","state",{
+      type: Sequelize.INTEGER,
+      defaultValue:1,
+      allowNull:false
+      })
+    ])
+    
+    await queryInterface.addConstraint("Users",{
+      fields:["state"],
+      type:"foreign key",
+      references:{
+        table:"Status",
+        field:"stateId"
+      },
+      onDelete:"cascade",
+      onUpdate:"cascade"
+    })
     /**
      * Add altering commands here.
      *
@@ -31,7 +49,9 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Status');
+    await queryInterface.removeColumn('Users','state')
+    await queryInterface.dropTable('Status')
+    
     /**
      * 
      * Add reverting commands here.
