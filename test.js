@@ -1,4 +1,6 @@
-const {User,UserInfo,NoId} = require('./models')
-// User.create({"id":"id2","password":"123","email":"2@naver.com"})
-// NoId.create({'noId':"test"})
-UserInfo.create({"userId":"id2"})
+const name=["Activate","Deactivate"]
+var names=""
+for(var i in name){
+    names += "('"+ name[i]+"'),"
+}
+console.log(names.slice(0,-1))
