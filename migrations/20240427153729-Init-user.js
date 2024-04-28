@@ -6,7 +6,8 @@ module.exports = {
     await queryInterface.createTable('Users',{
       id:{
         type:Sequelize.STRING,
-        primaryKey:true
+        primaryKey:true,
+        allowNull:false
       },
       email: {
         type: Sequelize.STRING,
@@ -26,6 +27,7 @@ module.exports = {
         type: Sequelize.DATE
       },
     })
+    
     /**
      * Add altering commands here.
      *
