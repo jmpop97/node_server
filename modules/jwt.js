@@ -7,7 +7,8 @@ module.exports = {
         /* 현재는 idx와 email을 payload로 넣었지만 필요한 값을 넣으면 됨! */
         const payload = {
             id: user.id,
-            email: user.email
+            email: user.email,
+            state: user.state,
         };
         const result = {
             token: jwt.sign(payload,process.env.PASSWORD_SECRET_STRING,{expiresIn:process.env.JWT_REFRESH_EXPIRATION}),

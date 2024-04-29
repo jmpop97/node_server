@@ -31,7 +31,7 @@ module.exports = {
         
         let hashpassword = await module.exports.hashPassword(id,password)
         User.findAll({
-            attributes:["id","password"],
+            attributes:["id","password","state","email"],
             where: {
                 id:id
             }
@@ -49,7 +49,7 @@ module.exports = {
             console.log("data is read!");
         })
         .catch(error => {
-            console.log("error");
+            console.log({"error":error});
             res.send({
                 "response": 400,
                 "error": error

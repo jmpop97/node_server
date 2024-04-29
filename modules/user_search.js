@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 module.exports ={
     all: async (res)=>{
         const result = User.findAll({
-            attributes:["id"]
+            attributes:["id","state"]
         })
         .then((comment) => {
             res.send({ "response": 200, "user": comment });
@@ -18,7 +18,7 @@ module.exports ={
     },
     choice: async (ids,res)=>{
         const result = User.findAll({
-            attributes:["id"],
+            attributes:["id","state"],
             where: {id : ids}
         })
         .then((comment) => {
@@ -33,7 +33,7 @@ module.exports ={
     },
     search_init: async (id,res)=>{
         const result = User.findAll({
-            attributes:["id"],
+            attributes:["id","state"],
             where: {id : {[Op.startsWith] : id}}
         })
         .then((comment) => {
@@ -48,7 +48,7 @@ module.exports ={
     },
     search_include: async (id,res)=>{
         const result = User.findAll({
-            attributes:["id"],
+            attributes:["id","state"],
             where: {id : {[Op.substring] : id}}
         })
         .then((comment) => {
