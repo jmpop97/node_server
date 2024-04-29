@@ -14,6 +14,8 @@ module.exports = {
         },
         primaryKey:true,
         unique:true,
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       birthDay:{
         type:Sequelize.DATEONLY
