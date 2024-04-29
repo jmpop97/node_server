@@ -17,12 +17,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey:"state",
       });
       this.hasMany(models.UserPermission);
-      // this.belongsToMany(
-      //   models.Permission,{
-      //     through:'UserPermission',
-      //     as:"permissions",
-      //   }
-      // )
+      this.belongsToMany(
+        models.Permission,{
+          through:models.UserPermission,
+          foreignKey:'userId',
+          // type:DataTypes.STRING
+        }
+      )
       // this.hasMany(models.UserPermission,{foreignKey:'id',allowNull:true})
       // this.belongsToMany(models.Permission,{
       // through:models.UserPermission,
@@ -50,11 +51,6 @@ module.exports = (sequelize, DataTypes) => {
       unique:true,
       validate:{isEmail:true}
     },
-    state:{
-      type: DataTypes.INTEGER,
-      defaultValue:1,
-      allowNull:false
-    }
   }, {
     sequelize,
     modelName: 'User',
