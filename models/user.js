@@ -12,7 +12,18 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasOne(models.UserInfo,{
         foreignKey:"userId",
-      allowNull:true})
+      allowNull:true});
+      this.belongsTo(models.Status,{
+        foreignKey:"state",
+      });
+      // this.hasMany(models.UserPermission,{foreignKey:'id',allowNull:true})
+      // this.belongsToMany(models.Permission,{
+      // through:models.UserPermission,
+      // foreignKey:'authId',
+      // as:'permissions'},)
+      // this.belongsToMany(models.Permission,{
+      //   through:'UserPermission'
+      // })
       // define association here
     }
   }
@@ -32,6 +43,11 @@ module.exports = (sequelize, DataTypes) => {
       unique:true,
       validate:{isEmail:true}
     },
+    state:{
+      type: DataTypes.INTEGER,
+      defaultValue:1,
+      allowNull:false
+    }
   }, {
     sequelize,
     modelName: 'User',
