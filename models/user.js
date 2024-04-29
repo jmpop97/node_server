@@ -16,6 +16,13 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Status,{
         foreignKey:"state",
       });
+      this.hasMany(models.UserPermission);
+      // this.belongsToMany(
+      //   models.Permission,{
+      //     through:'UserPermission',
+      //     as:"permissions",
+      //   }
+      // )
       // this.hasMany(models.UserPermission,{foreignKey:'id',allowNull:true})
       // this.belongsToMany(models.Permission,{
       // through:models.UserPermission,
