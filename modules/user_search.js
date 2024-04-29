@@ -61,4 +61,20 @@ module.exports ={
             });
         });
     },
+    search_only_state1: async (id,res)=>{
+        const result = Status.findAll({
+            include:{
+                model:User,
+                attributes:['id','state']}
+        })
+        .then((comment) => {
+            res.send({ "response": 200, "user": comment });
+        })
+        .catch(error => {
+            console.log({"at":"modules/search_user/choice","id":id,"error":error});
+            res.send({
+                "response": 400
+            });
+        });
+    }
 }
