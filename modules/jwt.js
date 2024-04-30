@@ -8,7 +8,8 @@ module.exports = {
         const payload = {
             id: user.id,
             email: user.email,
-            state: user.state,
+            state: user.Status.stateName,
+            auth: user.Permissions.map(entity=>entity.get("authName"))
         };
         const result = {
             token: jwt.sign(payload,process.env.PASSWORD_SECRET_STRING,{expiresIn:process.env.JWT_REFRESH_EXPIRATION}),

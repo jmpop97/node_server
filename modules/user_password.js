@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const {User,UserInfo} = require('../models')
+const {User,UserInfo,Permission,Status} = require('../models')
 const jwt = require('../modules/jwt')
 module.exports = {
     logUp: async(id,password,email,res)=>{
@@ -34,7 +34,18 @@ module.exports = {
             attributes:["id","password","state","email"],
             where: {
                 id:id
-            }
+            },
+            include:[{
+                model:Status,
+                attributes:['stateName']
+        },
+        {
+            attributes:['authName'],
+            model:Permission,
+            through: {
+                attributes: [],
+              },
+        }]
         })
         .then((comment) => {
             if (hashpassword===comment[0].password){
