@@ -8,13 +8,23 @@ const {Status,User,Permission,} = require('./models')
 // console.log(JSON.stringify(comment, null, 2))
 // })
 
-const result1 = User.findAll({attributes:["id"],
-    include:{
+User.findAll({
+    attributes:["id","password","state","email"],
+    where: {
+        id:"id1"
+    },
+        include:[{
+            model:Status,
+            attributes:['stateName']
+    },
+    {
+        attributes:['authName'],
         model:Permission,
         through: {
             attributes: [],
           },
-    },
+    }]
+
 })
 .then((comment) => {
 console.log(JSON.stringify(comment, null, 2))
