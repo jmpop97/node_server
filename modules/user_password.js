@@ -5,17 +5,16 @@ module.exports = {
     logUp: async(id,password,email,res)=>{
         let hashpassword = await module.exports.hashPassword(id,password)
         let create_id = {
-            "id": id,
-            "password": hashpassword,
-            "email": email
+            id: id,
+            password: hashpassword,
+            email: email,
+            UserInfo:{userId:id}
         };
-        User.create(create_id)
+        User.create(create_id,{include:[UserInfo]})
         .then(_ => {
         console.log("data is created!");
         res.send({ "response": 200 });
-        }).then(()=>
-        UserInfo.create({"userId":id})
-        )
+        })
         .catch(error => {
                 console.log({"error":error});
                 res.send({
