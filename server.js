@@ -3,10 +3,12 @@ const port_num=8000
 const express = require('express')
 const app = express()
 const userRouter= require("./router/user")
+const permissionRouter= require("./router/permission")
 
 app.set('port',port_num)
 app.use(express.json())
 app.use('/user',userRouter)
+app.use('/permission',permissionRouter)
 
 
 app.use((req, res, next)=> {

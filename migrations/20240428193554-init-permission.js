@@ -29,13 +29,16 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER},
+        type: Sequelize.INTEGER,
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",},
       userId:{
       type: Sequelize.STRING,
       references:{
         model:'Users',
         key:'id'
       },
+      defaultValue:2,
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
