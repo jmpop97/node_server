@@ -16,12 +16,13 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Status,{
         foreignKey:"state",
       });
-      this.hasMany(models.UserPermission);
+      this.hasMany(models.UserPermission,
+        { foreignKey:"userId"});
       this.belongsToMany(
         models.Permission,{
           through:models.UserPermission,
           foreignKey:'userId',
-          // type:DataTypes.STRING
+          type:DataTypes.STRING
         }
       )
       // this.hasMany(models.UserPermission,{foreignKey:'id',allowNull:true})

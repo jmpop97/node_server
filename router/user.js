@@ -1,8 +1,9 @@
 let express = require("express")
-const models = require("../models")
 const router = express.Router();
+
 const { Op } = require('sequelize');
-const crypto = require('crypto');
+const models = require("../models")
+
 const jwt = require("../modules/jwt")
 const search_user =require('../modules/user_search')
 const user_passward = require('../modules/user_password')
@@ -22,7 +23,7 @@ router.get("",(req,res)=>{
 
 router.get("/:id",(req,res)=>{
     //UserQuery
-    let {type,id}=req.body
+    let {type,id,state}=req.body
     jwt.verify(req.headers.authorization)
     .then((log_in_user)=>{
     if (log_in_user.response){
@@ -45,6 +46,9 @@ router.get("/:id",(req,res)=>{
             return
         case 'search_include':
             search_user.search_include(id,res)
+            return
+        case 'state':
+            search_user.state(state,res)
             return
         }
     })

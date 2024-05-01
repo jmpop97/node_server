@@ -12,22 +12,20 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.User,{foreignKey:'userId'});
-      // this.belongsTo(models.Permission,{foreignKey:'authId'});
+      this.belongsTo(models.Permission,{foreignKey:'authId'});
       // this.belongsToMany(models.Permission,{foreignKey:'AuthId'});
     }
   }
   UserPermission.init({
-    id:{
-      primaryKey:true,
-      type:DataTypes.INTEGER,
-      unique:true
-    },
     userId:{
     type: DataTypes.STRING,
+    allowNull:false
     },
     authId:{
         primaryKey:true,
         type: DataTypes.STRING,
+        allowNull:false,
+        defaultValue:2
         },
   }, {
     sequelize,

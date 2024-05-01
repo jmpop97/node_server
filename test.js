@@ -1,40 +1,20 @@
+const { Association } = require('sequelize')
 const {Status,User,Permission,UserPermission,UserInfo} = require('./models')
-
-// User.findAll({
-//     attributes:["id","password","state","email"],
-//     where: {
-//         id:"id1"
-//     },
-//         include:[{
-//             model:Status,
-//             attributes:['stateName']
-//     },
+const test = require('./modules/permission')
+user={id:"id1",
+auth:["Admin","User"]}
+add_perm=["Admin","User"]
+// let [create,update]=add_perm.reduce((a,b)=>
 //     {
-//         attributes:['authName'],
-//         model:Permission,
-//         through: {
-//             attributes: [],
-//           },
-//     }]
-// })
-// .then((comment) => {
-// console.log(JSON.stringify(comment, null, 2))
-// })
-
-id="id-5"
-email=id+"@m.com"
-input={id:id,
-password:"0",
-email:email,
-UserInfo:{userId:id}}
-User.create(input,{include:[UserInfo]})
-.then((comment) => {
-console.log(JSON.stringify(comment, null, 2))
-})
-// User.findOne({
-//     where: {id:'id1'},
-//     include:Userinfo
-// })
-// .then((comment) => {
-// console.log(JSON.stringify(comment, null, 2))
-// })
+//         console.log(a,b)
+//             if(user.auth.includes(b)){
+//             a[0].push(b)
+//     }
+//         else{
+//             a[1].push(b)
+//         }
+//         return a
+//     }
+//     ,[[],[]])
+// console.log(create)
+test.create(user,add_perm)
