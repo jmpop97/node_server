@@ -8,10 +8,11 @@ const jwt = require("../modules/jwt")
 const search_user =require('../modules/user_search')
 const user_passward = require('../modules/user_password')
 const user_update = require('../modules/user_update')
-router.post("",(req,res)=>{
+router.post("",async (req,res)=>{
     //createUser
     let {id,password,email} = req.body;
-    user_passward.logUp(id,password,email,res)
+    let response=await user_passward.logUp(id,password,email,res)
+    return res.send(response)
 })
 
 router.get("",(req,res)=>{

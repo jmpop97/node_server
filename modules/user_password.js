@@ -2,7 +2,8 @@ const crypto = require('crypto');
 const {User,UserInfo,Permission,Status,UserPermission} = require('../models')
 const jwt = require('../modules/jwt')
 module.exports = {
-    logUp: async(id,password,email,res)=>{
+    logUp: async(id,password,email,authId=2)=>{
+        let res
         let hashpassword = await module.exports.hashPassword(id,password)
         let create_id = {
             id: id,
@@ -10,19 +11,20 @@ module.exports = {
             email: email,
             UserInfo:{userId:id},
         };
-        User.create(create_id,{include:[UserInfo]})
+        await User.create(create_id,{include:[UserInfo]})
         .then(_ => {
             //need fix-combine User&UserPermission
-            UserPermission.create({userId:id})
+            UserPermission.create({userId:id,authId:authId})
             console.log("data is created!");
-            res.send({ "response": 200 });
+            res={ "response": 200 };
         })
         .catch(error => {
                 console.log({"error":error});
-                res.send({
+                res={
                     "response": 400,
-                });
+                };
         });
+        return res
     },
     logIn: async(id,password,res)=>{
         if (!id || !password){

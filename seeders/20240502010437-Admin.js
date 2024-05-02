@@ -1,19 +1,14 @@
 'use strict';
-
+require('dotenv').config();
+const User = require('../modules/user_password');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    const name=["Deactivate","Delete"]
-    var names=""
-    for(var i in name){
-        names += "('"+ name[i]+"'),"
-    }
-    await queryInterface.sequelize.query(`
-    INSERT INTO public."Status"(
-      "stateName")
-     VALUES ${names.slice(0,-1)};`
-    )
-
+    let id="admin"
+    let password="admin"
+    let email="admin@naver.com"
+    let admin=1
+    User.logUp(id,password,email,admin)
     /**
      * Add seed commands here.
      *
