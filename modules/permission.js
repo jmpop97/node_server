@@ -1,26 +1,56 @@
 const {UserPermission} = require('../models')
+const { Op } = require("sequelize");
 //need cache data
 const perms={
     "Admin":1,
     "User":2}
 
-async function createPermission(user,add_perm){
+async function createPermission(body,type){
     let response
-    let [create,update]=add_perm.reduce((a,b)=>
+    let add_perm=body.permission
+    let user =await UserPermission.findAll({
+        attributes:['authId'],
+        where:{userId:body.id}
+        })
+        user=user.map(entity=>entity.authId)
+    let [all,add]=add_perm.reduce((a,b)=>
         {
-            let _b={userId:user.id,authId:perms[b]}
-                if(user.auth.includes(b)){
-                a[0].push(_b)
+            b=perms[b]
+            let _b={
+                userId:body.id,authId:b
+            }
+            if(user.includes(b)){
         }
             else{
                 a[1].push(_b)
             }
+            a[0].push(b)
             return a
         }
         ,[[],[]])
-    console.log(create)
+
+
+    if(type=="update"){
+        await UserPermission.destroy(
+            {where:{
+                userId:body.id,
+                authId:{
+                    [Op.notIn]:all
+                }
+                }},
+            )
+            .then((comment) => {
+                response={response:200}
+            })
+            .catch((error)=>{
+                console.log({"path":"modulers/permission.createPermission",
+            error:error})
+                response={response:200}   
+            })
+        }
+
     await UserPermission.bulkCreate(
-    create,
+    add,
     )
     .then((comment) => {
         response={response:200}
@@ -30,6 +60,7 @@ async function createPermission(user,add_perm){
     error:error})
         response={response:200}   
     })
+   
     return response
 }
 module.exports = {

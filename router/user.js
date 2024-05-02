@@ -7,94 +7,63 @@ const models = require("../models")
 const jwt = require("../modules/jwt")
 const search_user =require('../modules/user_search')
 const user_passward = require('../modules/user_password')
-const user_update = require('../modules/user_update')
+const user_update = require('../modules/user_update');
+const user_search = require("../modules/user_search");
 router.post("",async (req,res)=>{
     //createUser
     let {id,password,email} = req.body;
-    let response=await user_passward.logUp(id,password,email,res)
+    let response=await user_passward.logUp(id,password,email)
     return res.send(response)
 })
 
-router.get("",(req,res)=>{
+router.get("",async(req,res)=>{
     //log in
     let {id,password} = req.body;
-    user_passward.logIn(id,password,res)
+    let response = await user_passward.logIn(id,password)
+    res.send(response)
 })
 
 
-router.get("/:id",(req,res)=>{
+router.get("/:id",async (req,res)=>{
     //UserQuery
-    let {type,id,state}=req.body
-    jwt.verify(req.headers.authorization)
-    .then((log_in_user)=>{
-    if (log_in_user.response){
-        res.send(log_in_user)
-        return
-    }
-    switch(type){
-        default:
-            search_user.choice(log_in_user.id,res)
-            return
-        case '*':
-        case 'all':
-            search_user.all(res)
-            return
-        case 'choice':
-            search_user.choice(id,res)
-            return
-        case 'search_init':
-            search_user.search_init(id,res)
-            return
-        case 'search_include':
-            search_user.search_include(id,res)
-            return
-        case 'state':
-            search_user.state(state,res)
-            return
-        }
-    })
-})
-
-
-router.patch("/",(req,res)=>{
-    // id change danger
     let {type,id}=req.body
-    jwt.verify(req.headers.authorization)
-    .then((log_in_user)=>{
+    let log_in_user =await jwt.verify(req.headers.authorization)
+    let body={"id":id,"log_in_user":log_in_user.id}
     if (log_in_user.response){
-        res.send(log_in_user)
-        return
+        return res.send(log_in_user)
     }
-    user_update.patch(log_in_user.id,req.body, res);
-    })
+    let response=await user_search.search(type,body)
+    return res.send(response)
+})
+
+router.patch("/",async (req,res)=>{
+    let {password,email,birthDay}=req.body
+    let log_in_user =await jwt.verify(req.headers.authorization)
+    let body={
+        id:log_in_user.id,
+        password:password,
+        email:email,
+        birthDay:birthDay}
+    if (log_in_user.response){
+        return res.send(body)
+    }
+    let response = await user_update.patch(body)
+    return res.send(response)
+
 })
 
 
-router.delete("/:id",(req,res)=>{
-    // id change danger
-        deleteUserId(res);
+router.delete("/",async(req,res)=>{
+    let log_in_user =await jwt.verify(req.headers.authorization)
+    let body={
+        id:log_in_user.id,
+        state:3}
+    if (log_in_user.response){
+        return res.send(body)
+    }
+    let response = await user_update.patch(body)
+    return res.send(response)
 })
 
-
-
-
-function deleteUserId(res) {
-    models.User.destroy({
-        where: {
-            id: { [Op.gt]: 30 }
-        }
-    })
-        .then((comment) => {
-            console.log("data is delete");
-            res.send({ "response": 200, "user": comment });
-        })
-        .catch(error => {
-            console.log({"error":error});
-            res.send({
-                "response": 400,
-                "error": error
-            });
-        });
-}
 
 module.exports = router

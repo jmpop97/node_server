@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const {User,UserInfo,Permission,Status,UserPermission} = require('../models')
 const jwt = require('../modules/jwt')
 module.exports = {
+    
     logUp: async(id,password,email,authId=2)=>{
         let res
         let hashpassword = await module.exports.hashPassword(id,password)
@@ -26,14 +27,15 @@ module.exports = {
         });
         return res
     },
-    logIn: async(id,password,res)=>{
+    logIn: async(id,password)=>{
+        let res
         if (!id || !password){
-            res.send({"response":400, "error": "wrong input"})
-            return
+            res= {"response":400, "error": "wrong input"}
+            return res
         }
         
         let hashpassword = await module.exports.hashPassword(id,password)
-        User.findAll({
+        await User.findAll({
             attributes:["id","password","state","email"],
             where: {
                 id:id
@@ -54,21 +56,22 @@ module.exports = {
             if (hashpassword===comment[0].password){
                 const user_data = jwt.sign(comment[0])
                 .then(user_data=>
-                    res.send({ "response": 200, "user": user_data})
+                    res={ "response": 200, "user": user_data}
                 )
             }
             else{
-                res.send({ "response": 400, "error":"잘못된 비밀번호"});
+                res={ "response": 400, "error":"잘못된 비밀번호"};
             }        
             console.log("data is read!");
         })
         .catch(error => {
             console.log({"error":error});
-            res.send({
+            res={
                 "response": 400,
                 "error": error
-            });
+            };
         });
+        return res
     },
     hashPassword: async(id,password)=>{
         return crypto.pbkdf2Sync(password,
