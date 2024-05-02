@@ -1,10 +1,14 @@
 let express = require("express")
 const router = express.Router();
 const jwt = require("../modules/jwt")
-const permission = require("../modules/permission")
+const Permission = require("../modules/permission")
 
 router.post("",async(req,res)=>{
-    let {type,permissions}=req.body
+    let {id,permission,type}=req.body
+    let body={
+        id:id,
+        permission:permission
+        }
     let log_in_user = await jwt.verify(req.headers.authorization)
     if (log_in_user.response){
         return res.send(log_in_user)
@@ -12,7 +16,7 @@ router.post("",async(req,res)=>{
     if (!log_in_user.auth.includes("Admin")){
         return res.send({response:401.1})
     }
-    response = await permission.create(log_in_user,permissions)
+    response = await Permission.create(body,type)
     return res.send(response)
 })
 
