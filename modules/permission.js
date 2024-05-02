@@ -5,6 +5,7 @@ const perms={
     "User":2}
 
 async function createPermission(user,add_perm){
+    let response
     let [create,update]=add_perm.reduce((a,b)=>
         {
             let _b={userId:user.id,authId:perms[b]}
@@ -18,13 +19,18 @@ async function createPermission(user,add_perm){
         }
         ,[[],[]])
     console.log(create)
-
-    UserPermission.bulkCreate(
+    await UserPermission.bulkCreate(
     create,
     )
     .then((comment) => {
-    console.log(JSON.stringify(comment, null, 2))
+        response={response:200}
     })
+    .catch((error)=>{
+        console.log({"path":"modulers/permission.createPermission",
+    error:error})
+        response={response:200}   
+    })
+    return response
 }
 module.exports = {
     create: createPermission
