@@ -1,9 +1,7 @@
 const {UserPermission} = require('../models')
 const { Op } = require("sequelize");
 //need cache data
-const perms={
-    "Admin":1,
-    "User":2}
+const permissionDB=require("../cache_DB/permission")
 
 async function createPermission(body,type){
     let response
@@ -15,7 +13,7 @@ async function createPermission(body,type){
         user=user.map(entity=>entity.authId)
     let [all,add]=add_perm.reduce((a,b)=>
         {
-            b=perms[b]
+            b=permissionDB.get(b)
             let _b={
                 userId:body.id,authId:b
             }
@@ -60,7 +58,6 @@ async function createPermission(body,type){
     error:error})
         response={response:200}   
     })
-   
     return response
 }
 module.exports = {
