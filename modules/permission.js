@@ -1,7 +1,10 @@
 const {UserPermission} = require('../models')
 const { Op } = require("sequelize");
+const cache_permission = require("../cache_DB/permission")
 //need cache data
-const permissionDB=require("../cache_DB/permission")
+const perms={
+    "Admin":1,
+    "User":2}
 
 async function createPermission(body,type){
     let response
@@ -11,23 +14,19 @@ async function createPermission(body,type){
         where:{userId:body.id}
         })
         user=user.map(entity=>entity.authId)
-    let [all,add]=add_perm.reduce((a,b)=>
-        {
-            b=permissionDB.get(b)
-            let _b={
-                userId:body.id,authId:b
-            }
-            if(user.includes(b)){
+    let all=[]; let add=[];
+    for (i in add_perm){
+        let b = await cache_permission.get(add_perm[i])
+        let _b={
+            userId:body.id,authId:b
         }
-            else{
-                a[1].push(_b)
-            }
-            a[0].push(b)
-            return a
+        if(user.includes(b)){
+    }
+        else{
+            add.push(_b)
         }
-        ,[[],[]])
-
-
+        all.push(b)
+    }
     if(type=="update"){
         await UserPermission.destroy(
             {where:{
