@@ -4,11 +4,17 @@ const User = require('../modules/user_password');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+
+
+
     let id="admin"
     let password="admin"
     let email="admin@naver.com"
     let admin=1
     await User.logUp(id,password,email,admin)
+
+
+
     /**
      * Add seed commands here.
      *

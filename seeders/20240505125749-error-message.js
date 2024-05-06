@@ -1,13 +1,12 @@
 'use strict';
 const seed_db=require("../modules/seedDB")
-const {Status}=require("../models")
+const {ErrorMessage}=require("../models")
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    let adds=await seed_db.seed_data('Status')
-    await Status.bulkCreate(adds)
-
-
+    let adds=await seed_db.seed_data('ErrorMessages')
+    await ErrorMessage.bulkCreate(adds)
     /**
      * Add seed commands here.
      *

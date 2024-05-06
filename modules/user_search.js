@@ -42,7 +42,7 @@ async function search_init(body){
     let id=body.id
     const result = await User.findAll({
         attributes:["id","state"],
-        where: {id : {[Op.startsWith] : id}}
+        where: {id : {[Op.startsWit] : id}}
     })
     .then((comment) => {
         res={ "response": 200, "user": comment };
@@ -91,3 +91,4 @@ module.exports ={
             }
     }
 }
+h

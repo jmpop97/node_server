@@ -1,7 +1,7 @@
 'use strict';
-
+const seed_db=require("../modules/seedDB")
+const {Status}=require("../models")
 const { QueryInterface } = require('sequelize');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -18,11 +18,12 @@ module.exports = {
       unique:true,
       allowNull:false
     }})
-    .then(()=>queryInterface.sequelize.query(`
-    INSERT INTO public."Status"(
-      "stateName")
-     VALUES ( 'Active');`
-    )),
+    .then(async()=>
+      //fix seed DB
+      {let adds=await seed_db.seed_data('Status',true)
+      await Status.bulkCreate(adds)
+       }
+    ),
       queryInterface.addColumn("Users","state",{
       type: Sequelize.INTEGER,
       defaultValue:1,
