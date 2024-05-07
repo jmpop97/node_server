@@ -4,11 +4,13 @@ const express = require('express')
 const app = express()
 const userRouter= require("./router/user")
 const permissionRouter= require("./router/permission")
+const errorMessage =require("./router/error_message")
 
 app.set('port',port_num)
 app.use(express.json())
 app.use('/user',userRouter)
 app.use('/permission',permissionRouter)
+app.use('/errorMessage',errorMessage)
 
 
 app.use((req, res, next)=> {
