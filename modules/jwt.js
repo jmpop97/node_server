@@ -1,6 +1,6 @@
 const randToken = require('rand-token');
 const jwt = require('jsonwebtoken');
-
+const error_message = require("../cache_DB/error_message")
 
 module.exports = {
     sign: async (user) => {
@@ -23,34 +23,18 @@ module.exports = {
              [_,token]=auth.split("Bearer ")
         }
         if (!token){
-            return {
-                "response": 400,
-                "error":"wrong token"
-            }
+            return error_message.get(1,auth)
         }
         let decoded;
         try {
             decoded = jwt.verify(token, process.env.PASSWORD_SECRET_STRING);
         } catch (err) {
             if (err.name === 'TokenExpiredError') {
-                console.log('expired token');
-                return {
-                    "response":419,
-                    "message":"토큰이 만료되었습니다"
-                }
-
+                return error_message.get(2,auth)
             } else if (err.name === 'JsonWebTokenError') {
-                console.log('invalid token');
-                return {
-                    "response":401,
-                    "message":"유효햐지 않은 토큰입니다"
-                }
+                return error_message.get(3,auth)
             } else{
-                console.log("token hidden error")
-                console.log(err.name)
-                return {
-                    "response":400
-                }
+                return error_message.get(4,auth)
             }
         }
         return decoded;

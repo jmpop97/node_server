@@ -1,6 +1,7 @@
 const { response } = require("express");
 const {User,UserInfo} = require("../models")
 const { Op } = require('sequelize');
+const error_message=require('../cache_DB/error_message')
 async function patch(body){
     let res
     let ress=await Promise.all([
@@ -27,14 +28,10 @@ async function patch_user(body){
         }
     })
     .then((comment) => {
-        console.log("data is update");
         res={ "response": 200};
     })
     .catch(error => {
-        console.log({"at":"moduler/user_update/patch_user","input":{"body":body},"error":error});
-        res={
-            "response": 400,
-        };
+        res=error_message.get(17,{patch_datas,error});
     });
     return res
 }
@@ -52,10 +49,7 @@ async function patch_info(body){
             res={ "response": 200};
         })
         .catch(error => {
-            console.log({"at":"moduler/user_update/patch_info","input":{"body":body},"error":error});
-            res={
-                "response": 400,
-            };
+            res=error_message.get(18,{patch_datas,error});
         });
     return res
 }
