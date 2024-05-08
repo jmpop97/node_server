@@ -1,10 +1,7 @@
 const {UserPermission} = require('../models')
 const { Op } = require("sequelize");
 const cache_permission = require("../cache_DB/permission")
-//need cache data
-const perms={
-    "Admin":1,
-    "User":2}
+const error_message = require("../cache_DB/error_message")
 
 async function createPermission(body,type){
     let response
@@ -40,9 +37,7 @@ async function createPermission(body,type){
                 response={response:200}
             })
             .catch((error)=>{
-                console.log({"path":"modulers/permission.createPermission",
-            error:error})
-                response={response:200}   
+                response=error_message.get(5) 
             })
         }
 
@@ -53,9 +48,7 @@ async function createPermission(body,type){
         response={response:200}
     })
     .catch((error)=>{
-        console.log({"path":"modulers/permission.createPermission",
-    error:error})
-        response={response:200}   
+        response=error_message.get(6)
     })
     return response
 }

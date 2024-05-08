@@ -34,7 +34,7 @@ router.post("/DB",async(req,res)=>{
 
 
 router.patch("/DB",async(req,res)=>{
-    let {authName}=req.body
+    let {id}=req.body.id
     let log_in_user = await jwt.verify(req.headers.authorization)
     if (log_in_user.response){
         return res.send(log_in_user)
@@ -42,8 +42,8 @@ router.patch("/DB",async(req,res)=>{
     if (!log_in_user.auth.includes("Admin")){
         return res.send({response:401.1})
     }
-    if (req.body.id){
-    x = await cache_error_message.patch(req.body.id)
+    if (id){
+    x = await cache_error_message.patch(id)
     }
     res.send(x)
 })

@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const {User,UserInfo,Permission,Status,UserPermission} = require('../models')
 const jwt = require('../modules/jwt')
+const error_message=require('../cache_DB/error_message')
 module.exports = {
     
     logUp: async(id,password,email,authId=2)=>{
@@ -16,21 +17,18 @@ module.exports = {
         .then(_ => {
             //need fix-combine User&UserPermission
             UserPermission.create({userId:id,authId:authId})
-            console.log("data is created!");
+            .catch((error)=>{error_message.get(8,{id,authId,error})})
             res={ "response": 200 };
         })
         .catch(error => {
-                console.log({"error":error});
-                res={
-                    "response": 400,
-                };
+            error_message.get(9,{id,password,email,authId,error})
         });
         return res
     },
     logIn: async(id,password)=>{
         let res
         if (!id || !password){
-            res= {"response":400, "error": "wrong input"}
+            res= error_message.get(10,{id,password})
             return res
         }
         
@@ -60,16 +58,11 @@ module.exports = {
                 )
             }
             else{
-                res={ "response": 400, "error":"잘못된 비밀번호"};
+                res=error_message.get(11,{id,password});
             }        
-            console.log("data is read!");
         })
         .catch(error => {
-            console.log({"error":error});
-            res={
-                "response": 400,
-                "error": error
-            };
+            res=error_message.get(12,{id,password,error});
         });
         return res
     },

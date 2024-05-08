@@ -1,7 +1,9 @@
 const seed_db = require("./modules/seedDB")
+const {ErrorMessage}=require("./models")
 async function test(){
-    let adds=await seed_db.seed_data('Permissions',true)
+    let adds=await seed_db.seed_data('ErrorMessages')
     console.log(adds)
+    ErrorMessage.bulkCreate(adds)
 }
 test()
 // var xlsx = require("xlsx");

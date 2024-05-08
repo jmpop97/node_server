@@ -5,7 +5,7 @@ const { Op } = require("sequelize");
 
 
 
-async function get(i){
+async function get(i,input=""){
     value = cache.get(i)
     if (value==undefined){
         db = await ErrorMessage.findAll({where:{id:i}})
@@ -14,7 +14,9 @@ async function get(i){
         }
         value = cache.get(i)
     }
-    return value
+    let{at,response,detail,intro}=value
+    console.log(JSON.stringify({at,intro,input:input}, null, 2))
+    return {response,detail}
 }
 
 async function patch(i){

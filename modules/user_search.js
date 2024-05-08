@@ -1,5 +1,6 @@
 const {User} = require("../models")
 const { Op } = require('sequelize');
+const error_message=require('../cache_DB/error_message')
 
 async function all(){
     let res
@@ -10,10 +11,7 @@ async function all(){
         res={ "response": 200, "user": comment };
     })
     .catch(error => {
-        console.log({"at":"modules/search_user/all","ids":ids,"error":error});
-        res={
-            "response": 400
-        };
+        res=error_message.get(13,{error});
     });
     return res
 }
@@ -29,10 +27,7 @@ async function choice(body){
         res={ "response": 200, "user": comment };
     })
     .catch(error => {
-        console.log({"at":"modules/search_user/choice","id":body.id,"error":error});
-        res={
-            "response": 400
-        };
+        res=error_message.get(14,{body,error});
     });
     return res
 }
@@ -42,16 +37,13 @@ async function search_init(body){
     let id=body.id
     const result = await User.findAll({
         attributes:["id","state"],
-        where: {id : {[Op.startsWit] : id}}
+        where: {id : {[Op.startsWith] : id}}
     })
     .then((comment) => {
         res={ "response": 200, "user": comment };
     })
     .catch(error => {
-        console.log({"at":"modules/search_user/choice","id":id,"error":error});
-        res={
-            "response": 400
-        };
+        res=error_message.get(15,{body,error});
     });
     return res
 }
@@ -66,10 +58,7 @@ async function search_include(id){
         res={ "response": 200, "user": comment };
     })
     .catch(error => {
-        console.log({"at":"modules/search_user/choice","id":id,"error":error});
-        res={
-            "response": 400
-        };
+        res=error_message.get(16,{id,error});
     });
     return res
 }
