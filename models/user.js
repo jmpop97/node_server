@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasOne(models.UserInfo,{
         foreignKey:"userId",
       allowNull:true});
+      this.hasMany(models.UserIPLog,{
+        foreignKey:"userId",
+      allowNull:true});
       this.belongsTo(models.Status,{
         foreignKey:"state",
       });

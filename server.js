@@ -5,9 +5,15 @@ const app = express()
 const userRouter= require("./router/user")
 const permissionRouter= require("./router/permission")
 const errorMessage =require("./router/error_message")
+const all_api =require("./router/all_api")
+const {UserIPLog} = require("./models")
 
 app.set('port',port_num)
 app.use(express.json())
+app.use('/', all_api);
+
+
+
 app.use('/user',userRouter)
 app.use('/permission',permissionRouter)
 app.use('/errorMessage',errorMessage)
