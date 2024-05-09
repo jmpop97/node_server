@@ -1,21 +1,21 @@
 const {UserPermission} = require('../models')
 const { Op } = require("sequelize");
-const cache_permission = require("../cache_DB/permission")
+
 const error_message = require("../cache_DB/error_message")
 
 async function createPermission(body,type){
     let response
     let add_perm=body.permission
     let user =await UserPermission.findAll({
-        attributes:['authId'],
+        attributes:['authName'],
         where:{userId:body.id}
         })
-        user=user.map(entity=>entity.authId)
+        user=user.map(entity=>entity.authName)
     let all=[]; let add=[];
     for (i in add_perm){
-        let b = await cache_permission.get(add_perm[i])
+        let b = add_perm[i]
         let _b={
-            userId:body.id,authId:b
+            userId:body.id,authName:b
         }
         if(user.includes(b)){
     }
@@ -28,7 +28,7 @@ async function createPermission(body,type){
         await UserPermission.destroy(
             {where:{
                 userId:body.id,
-                authId:{
+                authName:{
                     [Op.notIn]:all
                 }
                 }},

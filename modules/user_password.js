@@ -4,7 +4,7 @@ const jwt = require('../modules/jwt')
 const error_message=require('../cache_DB/error_message')
 module.exports = {
     
-    logUp: async(id,password,email,authId=2)=>{
+    logUp: async(id,password,email,authName="User")=>{
         let res
         let hashpassword = await module.exports.hashPassword(id,password)
         let create_id = {
@@ -16,12 +16,12 @@ module.exports = {
         await User.create(create_id,{include:[UserInfo]})
         .then(_ => {
             //need fix-combine User&UserPermission
-            UserPermission.create({userId:id,authId:authId})
-            .catch((error)=>{error_message.get(8,{id,authId,error})})
+            UserPermission.create({userId:id,authName:authName})
+            .catch((error)=>{error_message.get(8,{id,authName,error})})
             res={ "response": 200 };
         })
         .catch(error => {
-            error_message.get(9,{id,password,email,authId,error})
+            error_message.get(9,{id,password,email,authName,error})
         });
         return res
     },

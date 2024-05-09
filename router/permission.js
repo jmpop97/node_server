@@ -21,31 +21,31 @@ router.post("",async(req,res)=>{
 })
 
 
-router.post("/DB",async(req,res)=>{
-    let {authName}=req.body
-    let log_in_user = await jwt.verify(req.headers.authorization)
-    if (log_in_user.response){
-        return res.send(log_in_user)
-    }
-    if (!log_in_user.auth.includes("Admin")){
-        return res.send({response:401.1})
-    }
-    x = await permissionDB.setAll()
-    res.send(x)
-})
+// router.post("/DB",async(req,res)=>{
+//     let {authName}=req.body
+//     let log_in_user = await jwt.verify(req.headers.authorization)
+//     if (log_in_user.response){
+//         return res.send(log_in_user)
+//     }
+//     if (!log_in_user.auth.includes("Admin")){
+//         return res.send({response:401.1})
+//     }
+//     x = await permissionDB.setAll()
+//     res.send(x)
+// })
 
 
-router.patch("/DB",async(req,res)=>{
-    let {authName}=req.body
-    let log_in_user = await jwt.verify(req.headers.authorization)
-    if (log_in_user.response){
-        return res.send(log_in_user)
-    }
-    if (!log_in_user.auth.includes("Admin")){
-        return res.send({response:401.1})
-    }
-    x = await permissionDB.patch(req.body.authName)
-    res.send(x)
-})
+// router.patch("/DB",async(req,res)=>{
+//     let {authName}=req.body
+//     let log_in_user = await jwt.verify(req.headers.authorization)
+//     if (log_in_user.response){
+//         return res.send(log_in_user)
+//     }
+//     if (!log_in_user.auth.includes("Admin")){
+//         return res.send({response:401.1})
+//     }
+//     x = await permissionDB.patch(req.body.authName)
+//     res.send(x)
+// })
 
 module.exports = router
