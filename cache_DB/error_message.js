@@ -15,12 +15,13 @@ async function get(i,input=""){
         value = cache.get(i)
     }
     let{at,response,detail,intro}=value
-    console.log(JSON.stringify({at,intro,input:input}, null, 2))
+    console.log(JSON.stringify({at,i,intro,input:input}, null, 2))
     return {response,detail}
 }
 
 async function patch(i){
     db = await ErrorMessage.findAll({where:{id:i}})
+    console.log(db)
     for(j in db){
         cache.set(db[j].id,db[j])
     }

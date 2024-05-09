@@ -54,14 +54,11 @@ router.patch("/",async (req,res)=>{
 
 
 router.delete("/",async(req,res)=>{
-    let log_in_user =await jwt.verify(req.headers.authorization)
+    let log_in_user =req.log_in_user
     let body={
         id:log_in_user.id,
-        state:3}
-    if (log_in_user.response){
-        return res.send(body)
-    }
-    let response = await user_update.patch(body)
+        }
+    let response = await user_update.delete(body,del=true)
     return res.send(response)
 })
 

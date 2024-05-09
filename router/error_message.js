@@ -34,8 +34,9 @@ router.post("/DB",async(req,res)=>{
 
 
 router.patch("/DB",async(req,res)=>{
-    let {id}=req.body.id
+    let {id}=req.body
     let log_in_user = await jwt.verify(req.headers.authorization)
+    let x
     if (log_in_user.response){
         return res.send(log_in_user)
     }

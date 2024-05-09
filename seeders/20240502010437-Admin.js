@@ -10,7 +10,7 @@ module.exports = {
     let id="admin"
     let password="admin"
     let email="admin@naver.com"
-    let admin=1
+    let admin="Admin"
     await User.logUp(id,password,email,admin)
 
 

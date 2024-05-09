@@ -28,15 +28,6 @@ module.exports = (sequelize, DataTypes) => {
           type:DataTypes.STRING
         }
       )
-      // this.hasMany(models.UserPermission,{foreignKey:'id',allowNull:true})
-      // this.belongsToMany(models.Permission,{
-      // through:models.UserPermission,
-      // foreignKey:'authId',
-      // as:'permissions'},)
-      // this.belongsToMany(models.Permission,{
-      //   through:'UserPermission'
-      // })
-      // define association here
     }
   }
   User.init({

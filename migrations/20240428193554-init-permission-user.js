@@ -7,15 +7,10 @@ const {Permission}=require("../models")
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('Permissions', { 
-        authId: {
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
-          type: Sequelize.INTEGER
-        },
         authName:{
           type:Sequelize.STRING,
-          unique:true
+          unique:true,
+          primaryKey:true
         }})
 
     let adds=await seed_db.seed_data('Permissions',true)
@@ -34,9 +29,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",},
+        type: Sequelize.INTEGER},
       userId:{
       type: Sequelize.STRING,
       references:{
@@ -47,15 +40,16 @@ module.exports = {
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
-    authId:{
-      type: Sequelize.INTEGER,
+    authName:{
+      type: Sequelize.STRING,
       references:{
         model:'Permissions',
-        key:'authId'
+        key:'authName'
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
-    }}
+    }
+  }
   )
     
     /**

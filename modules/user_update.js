@@ -19,9 +19,15 @@ async function patch(body){
     return res
 }
 
-async function patch_user(body){
+async function patch_user(body,del=false){
     let res
-    let patch_datas={email : body.email}
+    let patch_datas
+    if (del){
+        patch_datas={state:3}
+    }
+    else{
+        patch_datas={email : body.email,state}
+    }
     await User.update(patch_datas, {
         where: {
             id: body.id
@@ -54,5 +60,6 @@ async function patch_info(body){
     return res
 }
 module.exports ={
-    patch:patch
+    patch:patch,
+    delete:patch_user
 }

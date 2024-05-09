@@ -10,24 +10,20 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-        this.hasMany(models.UserPermission,{foreignKey:"authId"})
+        this.hasMany(models.UserPermission,{foreignKey:"authName"})
         this.belongsToMany(models.User,{
             through:models.UserPermission,
-            foreignKey:'authId',
+            foreignKey:'authName',
             type:DataTypes.STRING,
      })
       // define association here
     }
   }
   Permission.init({
-    authId:{
+    authName:{
     primaryKey:true,
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
-    },
-    authName: {
-      allowNull: false,
-      type: DataTypes.STRING
     },
   }, {
     sequelize,

@@ -12,8 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.User,{foreignKey:'userId'});
-      this.belongsTo(models.Permission,{foreignKey:'authId'});
-      // this.belongsToMany(models.Permission,{foreignKey:'AuthId'});
+      this.belongsTo(models.Permission,{foreignKey:'authName'});
     }
   }
   UserPermission.init({
@@ -21,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     allowNull:false
     },
-    authId:{
+    authName:{
         primaryKey:true,
         type: DataTypes.STRING,
         allowNull:false,
