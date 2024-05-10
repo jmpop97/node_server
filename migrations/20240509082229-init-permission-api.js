@@ -10,11 +10,12 @@ module.exports = {
         primaryKey:true
       }
      });
-    await queryInterface.createTable('PermissionAPI', 
+    await queryInterface.createTable('PermissionAPIs', 
      { id: 
        {
-         type:Sequelize.STRING,
+         type:Sequelize.INTEGER,
          primaryKey:true,
+         autoIncrement:true,
          autoIncrementIdentity:true,
        },
        authName:{
@@ -45,8 +46,8 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('PermissionAPI');
-    await queryInterface.dropTable('API');
+    await queryInterface.dropTable('PermissionAPIs');
+    await queryInterface.dropTable('APIs');
     /**
      * Add reverting commands here.
      *

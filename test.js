@@ -8,5 +8,27 @@
 // test()
 
 
-const {UserIPLog}  = require("./models")
-UserIPLog.create({userId:"id1",IP:"123"})
+const {API,PermissionAPI,ErrorMessage,Permission}  = require("./models")
+
+// const ErrorMessage = require("./cache_DB/error_message")
+
+
+async function test(){
+    // await API.create({apiId:"test"})
+    // await PermissionAPI.create({apiId:"test",authName:"User"})
+    // await PermissionAPI.create({apiId:"test",authName:"Admin"})
+
+    let adds=await API.findOne(
+        {include:
+            {
+                model:Permission,
+                through:{
+                    attributes:[]
+                }
+            }
+        }
+    )
+    adds.Permissions.map(item=>item.authName)
+    console.log(adds.Permissions)
+}
+test()
