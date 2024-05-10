@@ -8,11 +8,8 @@ const { Op } = require("sequelize");
 async function get(i,input=""){
     value = cache.get(i)
     if (value==undefined){
-        db = await ErrorMessage.findAll({where:{id:i}})
-        for(j in db){
-            cache.set(db[j].id,db[j])
-        }
-        value = cache.get(i)
+        value = await ErrorMessage.findOne({where:{id:i}})
+        cache.set(value.id,value)
     }
     let{at,response,detail,intro}=value
     console.log(JSON.stringify({at,i,intro,input:input}, null, 2))
@@ -20,12 +17,8 @@ async function get(i,input=""){
 }
 
 async function patch(i){
-    db = await ErrorMessage.findAll({where:{id:i}})
-    console.log(db)
-    for(j in db){
-        cache.set(db[j].id,db[j])
-    }
-    value = cache.get(i)
+    value = await ErrorMessage.findOne({where:{id:i}})
+    cache.set(value.id,value)
     return value
 }
 

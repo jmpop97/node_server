@@ -10,12 +10,20 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-        this.hasMany(models.UserPermission,{foreignKey:"authName"})
-        this.belongsToMany(models.User,{
-            through:models.UserPermission,
-            foreignKey:'authName',
-            type:DataTypes.STRING,
-     })
+      this.hasMany(models.UserPermission,{foreignKey:"authName"})
+      this.belongsToMany(models.User,{
+          through:models.UserPermission,
+          foreignKey:'authName',
+          type:DataTypes.STRING,
+      })
+      this.hasMany(models.PermissionAPI,{foreignKey:"authName"})
+      this.belongsToMany(
+        models.API,{
+         through:models.PermissionAPI,
+         foreignKey:'authName',
+         type:DataTypes.STRING
+       }
+     );
       // define association here
     }
   }
