@@ -2,7 +2,7 @@ let express = require("express")
 const router = express.Router();
 const jwt = require("../modules/jwt")
 const Permission = require("../modules/permission")
-const permissionDB = require("../cache_DB/permission")
+// const permissionDB = require("../cache_DB/permission")
 router.post("",async(req,res)=>{
     let {id,permission,type}=req.body
     let body={
@@ -16,7 +16,7 @@ router.post("",async(req,res)=>{
     if (!log_in_user.auth.includes("Admin")){
         return res.send({response:401.1})
     }
-    response = await Permission.create(body,type)
+    response = await Permission.createUserPermission(body,type)
     return res.send(response)
 })
 

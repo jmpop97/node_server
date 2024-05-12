@@ -8,27 +8,27 @@
 // test()
 
 
-const {API,PermissionAPI,ErrorMessage,Permission}  = require("./models")
+const seed_db=require("./modules/seedDB")
+const model=require("./models")
+//
 
-// const ErrorMessage = require("./cache_DB/error_message")
-
-
+//seed
 async function test(){
-    // await API.create({apiId:"test"})
-    // await PermissionAPI.create({apiId:"test",authName:"User"})
-    // await PermissionAPI.create({apiId:"test",authName:"Admin"})
-
-    let adds=await API.findOne(
-        {include:
-            {
-                model:Permission,
-                through:{
-                    attributes:[]
-                }
-            }
-        }
-    )
-    adds.Permissions.map(item=>item.authName)
-    console.log(adds.Permissions)
+    let adds=await seed_db.seed_data('ErrorMessages',false,18)
+    console.log(adds)
+    await model.ErrorMessage.bulkCreate(adds)
+    // await PermissionAPI.bulkCreate(adds)
 }
+
+
+// const cache_api = require("./cache_DB/permissionAPI")
+// const check = require("./modules/permission")
+// async function test(){
+//     result=await check.apiPermissionCheck("GET/user",["test"])
+//     console.log(result)
+// }
+
+
+
+
 test()
