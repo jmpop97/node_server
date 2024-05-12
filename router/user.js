@@ -24,7 +24,7 @@ router.get("",async(req,res)=>{
 })
 
 
-router.get("/:id",async (req,res)=>{
+router.get("/ids",async (req,res)=>{
     //UserQuery
     let {type,id}=req.body
     let log_in_user =await jwt.verify(req.headers.authorization)

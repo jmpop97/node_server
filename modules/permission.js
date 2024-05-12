@@ -2,8 +2,26 @@ const {UserPermission} = require('../models')
 const { Op } = require("sequelize");
 
 const error_message = require("../cache_DB/error_message")
+const permissionAPI = require("../cache_DB/permissionAPI")
 
-async function createPermission(body,type){
+async function apiPermissionCheck(api,user_perm){
+    perms=await permissionAPI.get(api)
+    if (!perms){
+        return undefined
+    }
+    if (perms[0]=='All'){
+        return true
+    }
+    console.log(perms,user_perm)
+    for (i in user_perm){
+        if (perms.includes(user_perm[i])){
+            return true
+        }
+    }
+    return false
+}
+
+async function createUserPermission(body,type){
     let response
     let add_perm=body.permission
     let user =await UserPermission.findAll({
@@ -53,5 +71,6 @@ async function createPermission(body,type){
     return response
 }
 module.exports = {
-    create: createPermission
+    apiPermissionCheck,
+    createUserPermission,
 }

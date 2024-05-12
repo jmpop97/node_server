@@ -1,4 +1,4 @@
-const {API} = require("../models")
+const {API,Permission} = require("../models")
 const NodeCache = require( "node-cache" );
 const cache = new NodeCache()
 const { Op } = require("sequelize");
@@ -8,22 +8,52 @@ const { Op } = require("sequelize");
 async function get(i){
     value = cache.get(i)
     if (value==undefined){
-        value = await API.findOne({where:{apiId:i}})
-        cache.set(value.apiId,value)
+        db = await await API.findOne(
+            {
+                where:{apiId:i},
+                include:
+                {
+                    model:Permission,
+                    through:{
+                        attributes:[]
+                    }
+                }
+            }
+        )
+        if (db){
+            value=db.Permissions.map(Permissions=>Permissions.authName)
+            cache.set(i,value)
+        }
     }
     return value
 }
 
 async function patch(i){
-    value = await API.findOne({where:{apiId:i}})
-    cache.set(value.apiId,value)
+
+    db = await await API.findOne(
+        {
+            where:{apiId:i},
+            include:
+            {
+                model:Permission,
+                through:{
+                    attributes:[]
+                }
+            }
+        }
+    )
+    if (db){
+        value=db.Permissions.map(Permissions=>Permissions.authName)
+        cache.set(i,value)
+    }
     return value
 }
 
 async function setAll(){
     db = await API.findAll({})
     for(j in db){
-        cache.set(db[j].apiId,db[j])
+        value=db[j].Permissions.map(Permissions=>Permissions.authName)
+        cache.set(db[j].apiId,value)
     }
     return db
 }
