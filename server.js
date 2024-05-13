@@ -16,7 +16,7 @@ app.use('/', all_api);
 
 app.use('/user',userRouter)
 app.use('/permission',permissionRouter)
-app.use('/errorMessage',errorMessage)
+app.use('/error_message',errorMessage)
 
 
 app.listen(app.get('port'),()=>{

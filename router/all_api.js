@@ -15,15 +15,19 @@ router.use("", async (req, res, next)=>{
   UserIPLog.create(add)
   //permission
   if (add.url.slice(-1)=='/'){
-    console.log("wrok")
     add.url=add.url.slice(0,-1)
   }
-  let bool_permission=await permission.apiPermissionCheck(add.url,log_in_user.auth)
+  let bool_permission=await permission.PermissionAPICheck(add.url,log_in_user.auth)
   if (bool_permission){
     next();
     }
   else if (bool_permission==false){
-    res.send(await error_message.get(19))
+    if (log_in_user.response){
+      return res.send(log_in_user)
+    }
+    else{
+      res.send(await error_message.get(19))
+    }
   }
   else{
     res.send(await error_message.get(20))
