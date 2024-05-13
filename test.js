@@ -13,20 +13,35 @@ const model=require("./models")
 //
 
 //seed
-async function test(){
-    let adds=await seed_db.seed_data('ErrorMessages',false,18)
-    console.log(adds)
-    await model.ErrorMessage.bulkCreate(adds)
-    // await PermissionAPI.bulkCreate(adds)
-}
+// async function test(){
+    //API unique error
+    // let adds=await seed_db.seed_data('ErrorMessages',false,21)
+    // console.log(adds)
+    // await model.API.bulkCreate(adds)
+    // await model.ErrorMessage.bulkCreate(adds)
+// }
 
 
 // const cache_api = require("./cache_DB/permissionAPI")
 // const check = require("./modules/permission")
-// async function test(){
-//     result=await check.apiPermissionCheck("GET/user",["test"])
-//     console.log(result)
-// }
+const {Op} = require("sequelize")
+async function test(){
+    await model.PermissionAPI.destroy(
+        {where:{
+            apiId:"GET/user/ids",
+            authName:{
+                [Op.notIn]:['User']
+            }
+            }},
+        )
+        .then((comment) => {
+            response={response:200}
+        })
+        .catch((error)=>{
+        console.log(error)
+    })
+}
+
 
 
 

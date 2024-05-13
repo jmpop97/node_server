@@ -7,13 +7,6 @@ const {error_message} = require("../models")
 
 router.get("",async(req,res)=>{
     //search
-    let log_in_user = await jwt.verify(req.headers.authorization)
-    if (log_in_user.response){
-        return res.send(log_in_user)
-    }
-    if (!log_in_user.auth.includes("Admin")){
-        return res.send({response:401.1})
-    }
     let {at}=req.body
     x = await cache_error_message.search(at)
     res.send(x)
@@ -21,13 +14,6 @@ router.get("",async(req,res)=>{
 
 
 router.post("/DB",async(req,res)=>{
-    let log_in_user = await jwt.verify(req.headers.authorization)
-    if (log_in_user.response){
-        return res.send(log_in_user)
-    }
-    if (!log_in_user.auth.includes("Admin")){
-        return res.send({response:401.1})
-    }
     x = await cache_error_message.setAll()
     res.send(x)
 })
@@ -35,14 +21,7 @@ router.post("/DB",async(req,res)=>{
 
 router.patch("/DB",async(req,res)=>{
     let {id}=req.body
-    let log_in_user = await jwt.verify(req.headers.authorization)
     let x
-    if (log_in_user.response){
-        return res.send(log_in_user)
-    }
-    if (!log_in_user.auth.includes("Admin")){
-        return res.send({response:401.1})
-    }
     if (id){
     x = await cache_error_message.patch(id)
     }
