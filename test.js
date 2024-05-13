@@ -26,20 +26,10 @@ const model=require("./models")
 // const check = require("./modules/permission")
 const {Op} = require("sequelize")
 async function test(){
-    await model.PermissionAPI.destroy(
-        {where:{
-            apiId:"GET/user/ids",
-            authName:{
-                [Op.notIn]:['User']
-            }
-            }},
-        )
-        .then((comment) => {
-            response={response:200}
-        })
-        .catch((error)=>{
-        console.log(error)
-    })
+    let adds=await seed_db.seed_data('API',false,14)
+    console.log(adds)
+    model.API.bulkCreate(adds)
+    model.PermissionAPI.bulkCreate(adds)
 }
 
 

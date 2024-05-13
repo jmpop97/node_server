@@ -2,7 +2,7 @@ let express = require("express")
 const router = express.Router();
 const Permission = require("../modules/permission")
 const error_message=require('../cache_DB/error_message')
-
+const permissionAPI = require("../cache_DB/permissionAPI")
 
 router.post("/user",async(req,res)=>{
     let {id,permissions,type}=req.body
@@ -29,31 +29,25 @@ router.post("/api",async(req,res)=>{
     response = await Permission.createPermissionAPI(body,type)
     return res.send(response)
 })
-// router.post("/DB",async(req,res)=>{
-//     let {authName}=req.body
-//     let log_in_user = await jwt.verify(req.headers.authorization)
-//     if (log_in_user.response){
-//         return res.send(log_in_user)
-//     }
-//     if (!log_in_user.auth.includes("Admin")){
-//         return res.send({response:401.1})
-//     }
-//     x = await permissionDB.setAll()
-//     res.send(x)
-// })
 
 
-// router.patch("/DB",async(req,res)=>{
-//     let {authName}=req.body
-//     let log_in_user = await jwt.verify(req.headers.authorization)
-//     if (log_in_user.response){
-//         return res.send(log_in_user)
-//     }
-//     if (!log_in_user.auth.includes("Admin")){
-//         return res.send({response:401.1})
-//     }
-//     x = await permissionDB.patch(req.body.authName)
-//     res.send(x)
-// })
+router.get("/api/DB",async(req,res)=>{
+    let {api}=req.body
+    x = await permissionAPI.search(api)
+    res.send(x)
+})
+
+
+router.post("/api/DB",async(req,res)=>{
+    x = await permissionAPI.setAll()
+    res.send(x)
+})
+
+
+router.patch("/api/DB",async(req,res)=>{
+    let {api}=req.body
+    x = await permissionAPI.patch(api)
+    res.send(x)
+})
 
 module.exports = router

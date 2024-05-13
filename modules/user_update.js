@@ -26,7 +26,7 @@ async function patch_user(body,del=false){
         patch_datas={state:3}
     }
     else{
-        patch_datas={email : body.email,state}
+        patch_datas={email : body.email}
     }
     await User.update(patch_datas, {
         where: {

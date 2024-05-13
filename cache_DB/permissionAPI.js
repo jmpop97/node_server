@@ -50,7 +50,13 @@ async function patch(i){
 }
 
 async function setAll(){
-    db = await API.findAll({})
+    db = await API.findAll({include:
+        {
+            model:Permission,
+            through:{
+                attributes:[]
+            }
+        }})
     for(j in db){
         value=db[j].Permissions.map(Permissions=>Permissions.authName)
         cache.set(db[j].apiId,value)
@@ -59,7 +65,13 @@ async function setAll(){
 }
 
 async function search(apiId){
-    db = await PermissionAPI.findAll({
+    db = await API.findAll({include:
+        {
+            model:Permission,
+            through:{
+                attributes:[]
+            }
+        }},{
         where:{apiId:{[Op.substring]:apiId}}
     })
     return db
