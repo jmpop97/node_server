@@ -2,13 +2,24 @@ let express = require("express")
 const router = express.Router();
 const jwt = require("../modules/jwt")
 const cache_error_message = require("../cache_DB/error_message")
-const {error_message} = require("../models")
+const {ErrorMessage} = require("../models")
 
 
 router.get("",async(req,res)=>{
     //search
     let {at}=req.body
     x = await cache_error_message.search(at)
+    res.send(x)
+})
+router.patch("",async(req,res)=>{
+    //search
+    let {id,at,response,detail,intro}=req.body
+    x = await ErrorMessage.update(
+        {
+            at,response,detail,intro
+        },
+        {where:{id}}
+    )
     res.send(x)
 })
 
