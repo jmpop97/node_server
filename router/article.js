@@ -1,6 +1,5 @@
 let express = require("express")
 const router = express.Router();
-const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
 
@@ -21,11 +20,16 @@ const upload = multer({
 
 const uploadArrayImage = upload.array('image')
 router.post('/upload',
-    (req,res)=>{
-        uploadArrayImage(req, res,(err)=>
-            {res.send("error")}
+    async (req,res)=>{
+        await uploadArrayImage(req, res,(err)=>
+            {if (err){
+                return res.send(400)
+                }
+                return res.send(req.files.path)
+            }
         )
     }
 );
+
 
 module.exports = router
