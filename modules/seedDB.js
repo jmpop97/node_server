@@ -1,13 +1,13 @@
 var xlsx = require("xlsx");
 const excelFile = xlsx.readFile( "./seeders/seed_data.xlsx" );
 
-async function seed_data(db,migration=false,start=0,end=0){
+async function seed_data(db,start=0,end=0){
     const table = excelFile.Sheets[db];
     let adds = xlsx.utils.sheet_to_json( table, { defval : "" } );
     if (!end){
         end=adds.length
     }
-    adds=adds.filter((key,i)=>key.migration==migration && start<=i&& i<=end)
+    adds=adds.filter((key,i)=>start<=i&& i<=end)
     return adds 
 }
 

@@ -1,6 +1,8 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
+const seed_db=require("../modules/seedDB")
+const {PermissionAPI}=require("../models")
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('APIs', 
@@ -37,6 +39,8 @@ module.exports = {
         onDelete: "CASCADE",
       }
       });
+    let adds=await seed_db.seed_data('API')
+    await PermissionAPI.bulkCreate(adds)
     /**
      * Add altering commands here.
      *
