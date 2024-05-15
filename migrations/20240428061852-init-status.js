@@ -20,7 +20,7 @@ module.exports = {
     }})
     .then(async()=>
       //fix seed DB
-      {let adds=await seed_db.seed_data('Status',true)
+      {let adds=await seed_db.seed_data('Status')
       await Status.bulkCreate(adds)
        }
     ),

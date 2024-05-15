@@ -13,7 +13,7 @@ module.exports = {
           primaryKey:true
         }})
 
-    let adds=await seed_db.seed_data('Permissions',true)
+    let adds=await seed_db.seed_data('Permissions')
     await Permission.bulkCreate(adds)
 
     // await queryInterface.bulkInsert('Permissions', [{

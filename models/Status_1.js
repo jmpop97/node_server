@@ -17,15 +17,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Status.init({
+    stateId:{
+    primaryKey:true,
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    },
     stateName: {
       allowNull: false,
-      unique:true,
-      primaryKey:true,
       type: DataTypes.STRING
     },
   }, {
     sequelize,
-    modelName: 'Status',
+    modelName: 'Status_1',
     tableName: 'Status',
     createdAt:false,
     updatedAt:false
