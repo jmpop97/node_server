@@ -35,11 +35,12 @@ module.exports = {
         onDelete: "CASCADE",
       },
       title:{
-        type:Sequelize.TEXT,
-        allowNull:false
+        type:Sequelize.STRING,
+        allowNull:false,
       },
       text:{
-        type:Sequelize.TEXT
+        type:Sequelize.TEXT,
+        defaultValue:""
       },
       createdAt: {
         allowNull: false,
@@ -51,26 +52,31 @@ module.exports = {
       },
     },
     )
-
+    await queryInterface.createTable('ArticleImages',{
+      articleId:{
+        type:Sequelize.INTEGER,
+        references:{
+          model:"Articles",
+          key:"articleId"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      image:{
+        type:Sequelize.STRING,
+        primaryKey:true
+      },
+})
     await queryInterface.createTable('Tags', 
     {
-      tagName: {
+      tag: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING
       }
     },
     )
-    await queryInterface.createTable('ArticleImage',{
-      image:{
-        type:Sequelize.STRING,
-        unique:true,
-        primaryKey:true
-      }
-    }) 
-
-
-    await queryInterface.createTable('ArticleTags',{
+    await queryInterface.createTable('Article_Tags',{
       id:{
         type:Sequelize.INTEGER,
         primaryKey:true,
@@ -89,34 +95,12 @@ module.exports = {
         type:Sequelize.STRING,
         references:{
           model:"Tags",
-          key:"tagName"
+          key:"tag"
         }
       },
     }) 
-    await queryInterface.createTable('ArticleImages',{
-          id:{
-            type:Sequelize.INTEGER,
-            primaryKey:true,
-            autoIncrement:true,
-            autoIncrementIdentity:true},
-          articleId:{
-            type:Sequelize.INTEGER,
-            references:{
-              model:"Articles",
-              key:"articleId"
-            },
-            onUpdate: "CASCADE",
-            onDelete: "CASCADE",
-          },
-          image:{
-            type:Sequelize.STRING,
-            references:{
-              model:"ArticleImage",
-              key:"image"
-            }
-          },
-    })
-    await queryInterface.createTable('PermissionArticle',{
+   
+    await queryInterface.createTable('Permission_Articles',{
       id:{
         type:Sequelize.INTEGER,
         primaryKey:true,
@@ -131,7 +115,7 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      permission:{
+      authName:{
         type:Sequelize.STRING,
         references:{
           model:"Permissions",
@@ -152,10 +136,9 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('PermissionArticle');
+    await queryInterface.dropTable('Permission_Articles');
+    await queryInterface.dropTable('Article_Tags');
     await queryInterface.dropTable('ArticleImages');
-    await queryInterface.dropTable('ArticleTags');
-    await queryInterface.dropTable('ArticleImage');
     await queryInterface.dropTable('Tags');
     await queryInterface.dropTable('Articles');
 
