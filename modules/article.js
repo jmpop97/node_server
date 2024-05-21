@@ -1,13 +1,14 @@
 const models=require("../models")
 const error_message = require("../cache_DB/error_message")
 const { Op } = require("sequelize");
+
 async function createArticle(body){
 
     let data={
         title:body.title,
         text:body.text,
         state:body.state,
-        creater:"id1",
+        creater:body.creater,
         Article_Tags:body.tags?.map(x=>{return {tag:x}}),
         ArticleImages:body.images?.map(x=>{return {image:x}}),
         Permission_Articles:body.permissions?.map(x=>{return {authName:x}})
@@ -37,7 +38,7 @@ async function createArticle(body){
         res = error_message.get(24,{body,err})
     )
     .then((article)=>{
-        delete article.dataValues.Permission_Articles
+        // delete article.dataValues.Permission_Articles
         res = {response:200,article:article}
     })
     
@@ -47,7 +48,8 @@ async function createArticle(body){
 async function patchArticle(body){
 
     let data={
-        articleId:body.id,
+        articleId:body.articleId,
+        creater:body.creater,
         title:body.title,
         text:body.text,
         state:body.state,
@@ -66,10 +68,20 @@ async function patchArticle(body){
     models.Permission_Article,
     ]}
     )
-    await tag_update(data,article)
-    await permission_update(data,article)
-    await image_update(data,article)
-    await article.update(data)
+    if (!article){
+        return error_message.get(25,data.articleId)
+    }
+    else if (article.creater!=data.creater){
+        return error_message.get(26,data.articleId)
+    }
+    else{
+        await tag_update(data,article)
+        await permission_update(data,article)
+        await image_update(data,article)
+        await article.update(data)
+    }
+
+
     // await permission_update(data,article)
 
 
@@ -153,7 +165,7 @@ async function permission_update(data,article){
             )
         }
     }
-    models.Permission_Article.bulkCreate(add,{where:{articleId:body.id}})
+    models.Permission_Article.bulkCreate(add,{where:{articleId:data.articleId}})
 }
 
 async function image_update(data,article){
@@ -188,7 +200,7 @@ async function image_update(data,article){
             )
         }
     }
-    models.ArticleImage.bulkCreate(add,{where:{articleId:body.id}})   
+    models.ArticleImage.bulkCreate(add,{where:{articleId:data.articleId}})   
 }
 
 module.exports = {

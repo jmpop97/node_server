@@ -43,12 +43,13 @@ async function test(){
     // })
     // console.log(JSON.stringify(a, null, 2))
     body={
-        id:25,
+        id:1,
+        creater:"id1",
         title:"test",
         state:"Active",
         tags:["1","3"],
         permissions:["Admin"],
-        images:["test"],
+        images:["test1"],
     }
 
     check.patchArticle(body)
