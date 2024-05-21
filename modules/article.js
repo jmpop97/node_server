@@ -30,12 +30,14 @@ async function createArticle(body){
             models.ArticleImage,
             models.Article_Tag,
             models.Permission_Article,
-        ]}
+            ]
+        }
     )
     .catch((err)=>
         res = error_message.get(24,{body,err})
     )
     .then((article)=>{
+        delete article.dataValues.Permission_Articles
         res = {response:200,article:article}
     })
     
