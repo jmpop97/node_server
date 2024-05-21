@@ -30,7 +30,6 @@ module.exports = {
           model:'Users',
           key:'id'
         },
-        unique:true,
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
