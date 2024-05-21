@@ -20,17 +20,7 @@ const upload = multer({
 });
 
 const uploadArrayImage = upload.array('image')
-router.post('/upload',
-    async (req,res)=>{
-        await uploadArrayImage(req, res,(err)=>
-            {if (err){
-                return res.send(400)
-            }
-            console.log(req.files)
-            }
-        )
-    }
-);
+
 
 router.post("",async (req,res)=>{
     uploadArrayImage(req, res,async (err)=>
@@ -38,7 +28,7 @@ router.post("",async (req,res)=>{
             return res.send(400)
         }    
         let data={
-            create:req.log_in_user,
+            creater:req.log_in_user?.id,
             state:"Active",
             title:req.body.title,
             text:req.body.text,
@@ -52,5 +42,24 @@ router.post("",async (req,res)=>{
     )  
 })
 
-
+router.patch("",async (req,res)=>{
+    uploadArrayImage(req, res,async (err)=>
+        {if (err){
+            return res.send(400)
+        }    
+        let data={
+            creater:req?.log_in_user.id,
+            state:"Active",
+            articleId:req.body?.articleId,
+            title:req.body?.title,
+            text:req.body?.text,
+            tags:req.body?.tags,
+            images:[],
+            permissions:['User']}
+        data.images=req.files?.map(x=>x.path)
+        let article=await Article.patchArticle(data);
+        res.send(article)
+        }
+    )  
+})
 module.exports = router
