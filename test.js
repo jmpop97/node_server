@@ -2,7 +2,7 @@
 
 
 const seed_db=require("./modules/seedDB")
-const model=require("./models")
+const models=require("./models")
 const Article_Image = require("./models/ArticleImage")
 const ArticleImage = require("./models/ArticleImage")
 const Article_Tag = require("./models/Article_Tag")
@@ -29,7 +29,8 @@ async function test(){
     //     Permission_Article:[{authName:"User"}]
     // }
     // a=await model.Tag.bulkCreate([{tagName:1},{tagName:t}],{updateOnDuplicate: ["tagName"]})
-    // b= await model.Article.create(data,{include:[
+    // b= await model.Article.create(data,
+    //      {include:[
     //     model.ArticleImage,
     //     model.Article_Tag,
     //     model.Permission_Article,
@@ -42,11 +43,15 @@ async function test(){
     // })
     // console.log(JSON.stringify(a, null, 2))
     body={
-        title:"test",    
-        tags:["1","2"]
+        id:25,
+        title:"test",
+        state:"Active",
+        tags:["1","3"],
+        permissions:["Admin"],
+        images:["test"],
     }
 
-    check.createArticle(body)
+    check.patchArticle(body)
 
 
 }

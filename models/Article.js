@@ -5,6 +5,10 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Article extends Model {
     static associate(models) {
+        //creater
+        this.belongsTo(models.User,{
+          foreignKey:"creater"
+        })
         //image
         this.hasMany(models.ArticleImage,{
           foreignKey:"articleId"

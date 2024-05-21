@@ -2,6 +2,7 @@ let express = require("express")
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const Article = require('../modules/article')
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -9,7 +10,7 @@ const upload = multer({
 			done(null, Date.now()+file.originalname);
         },
 		destination(req, file, done) {
-		    done(null, path.join(__dirname, "./uploads"));
+		    done(null, path.join(__dirname, "../uploads"));
 	    },
     }),
     limits: { fileSize:
@@ -24,12 +25,32 @@ router.post('/upload',
         await uploadArrayImage(req, res,(err)=>
             {if (err){
                 return res.send(400)
-                }
-                return res.send(req.files.path)
+            }
+            console.log(req.files)
             }
         )
     }
 );
+
+router.post("",async (req,res)=>{
+    uploadArrayImage(req, res,async (err)=>
+        {if (err){
+            return res.send(400)
+        }    
+        let data={
+            create:req.log_in_user,
+            state:"Active",
+            title:req.body.title,
+            text:req.body.text,
+            tags:req.body.tags,
+            images:[],
+            permissions:['User']}
+        data.images=req.files?.map(x=>x.path)
+        let article=await Article.createArticle(data);
+        res.send(article)
+        }
+    )  
+})
 
 
 module.exports = router
