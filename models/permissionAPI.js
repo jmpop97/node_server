@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
         type:DataTypes.INTEGER,
         allowNull:false,
         autoIncrement:true,
-        primaryKey:true
+        primaryKey:true,
+        unique:true
       },
       apiId: {
         type:DataTypes.STRING,

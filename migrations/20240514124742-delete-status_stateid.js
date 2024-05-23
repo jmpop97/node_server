@@ -50,7 +50,6 @@ module.exports = {
     SET state = 
     CASE
     `
-    console.log(adds.length)
     for (let i=0;i<adds.length;i++){
       getquery+= `WHEN "stateId" = ${adds[i].stateId} THEN '${adds[i].stateName}'`
     }
