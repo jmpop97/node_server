@@ -9,6 +9,7 @@ const search_user =require('../modules/user_search')
 const user_passward = require('../modules/user_password')
 const user_update = require('../modules/user_update');
 const user_search = require("../modules/user_search");
+const User = require("../modules/user")
 router.post("",async (req,res)=>{
     //createUser
     let {id,password,email} = req.body;
