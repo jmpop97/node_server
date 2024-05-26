@@ -1,6 +1,6 @@
 'use strict';
 require('dotenv').config();
-const User = require('../modules/user_password');
+const User = require("../modules/user")
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -11,7 +11,7 @@ module.exports = {
     let password="admin"
     let email="admin@naver.com"
     let admin="Admin"
-    await User.logUp(id,password,email,admin)
+    await new User.LocalUser(id,password,email).logUp()
 
 
 

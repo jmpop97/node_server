@@ -51,7 +51,6 @@ async function patch_info(body){
         where :{userId:body.id}
     })
         .then((comment) => {
-            console.log("data is update");
             res={ "response": 200};
         })
         .catch(error => {

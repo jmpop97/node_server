@@ -6,21 +6,20 @@ const models = require("../models")
 
 const jwt = require("../modules/jwt")
 const search_user =require('../modules/user_search')
-const user_passward = require('../modules/user_password')
 const user_update = require('../modules/user_update');
 const user_search = require("../modules/user_search");
 const User = require("../modules/user")
 router.post("",async (req,res)=>{
     //createUser
     let {id,password,email} = req.body;
-    let response=await user_passward.logUp(id,password,email)
+    let response=await new User.LocalUser(id,password,email).logUp()
     return res.send(response)
 })
 
 router.get("",async(req,res)=>{
     //log in
     let {id,password} = req.body;
-    let response = await user_passward.logIn(id,password)
+    let response = await new User.LocalUser(id,password).logIn()
     res.send(response)
 })
 
