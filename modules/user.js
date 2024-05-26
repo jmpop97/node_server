@@ -1,13 +1,15 @@
 const crypto = require('crypto');
 const models = require('../models')
 const error_message=require('../cache_DB/error_message')
+const jwt = require('jsonwebtoken');
+const randToken = require('rand-token');
 
 class User{
     constructor(id,password,email,authName="User"){
         this.id=id;
         this.password=password;
         this.email=email;
-        this.authName=authName
+        this.authName=authName;
     }
     async logUp(){
         let {id,password,email,authName}=this
@@ -35,45 +37,39 @@ class User{
         let {id,password}=this
         let res
         if (!id || !password){
-            res= error_message.get(10,{id,password})
+            res= error_message.get(10,{id})
             return res
         }
         
-        let hashpassword = await module.exports.hashPassword(id,password)
-        await User.findAll({
-            attributes:["id","password","state","email"],
-            where: {
-                id:id
-            },
-            include:[{
-                model:Status,
-                attributes:['stateName']
-        },
-        {
-            attributes:['authName'],
-            model:Permission,
-            through: {
-                attributes: [],
-              },
-        }]
+        let hashpassword = await new Password().hashPassword(id,password)
+        await models.User.findByPk(
+            id,
+            {
+                include:[
+                {
+                    model:models.Permission,
+                    through:{
+                        attribute:[]
+                    }
+                },
+            ]
         })
         .then((comment) => {
-            if (hashpassword===comment[0].password){
-                const user_data = jwt.sign(comment[0])
+            if (hashpassword===comment.password){
+                const user_data = new JWT().sign(comment)
                 .then(user_data=>
                     res={ "response": 200, "user": user_data}
                 )
             }
             else{
-                res=error_message.get(11,{id,password});
+                res=error_message.get(11,{id});
             }        
         })
         .catch(error => {
-            res=error_message.get(12,{id,password,error});
+            res=error_message.get(12,{id,error});
         });
         return res
     }
-
 }
 class LocalUser extends User{
     constructor(id,password,email,authName="User"){
@@ -83,7 +79,7 @@ class LocalUser extends User{
 
 class SocialUser extends User{
     constructor(id,password,email,authName="User"){
-        super("Social"+id,password,email,authName)
+        super("Social"+email,"password",email,authName)
     }
 }
 
@@ -96,9 +92,46 @@ class Password{
     }
 }
 
-
+class JWT{
+    async sign(user){
+        const payload = {
+            id: user.id,
+            email: user.email,
+            state: user.Status,
+            auth: user.Permissions.map(entity=>entity.get("authName"))
+        };
+        //future: need user refresh token
+        const result = {
+            token: jwt.sign(payload,process.env.PASSWORD_SECRET_STRING,{expiresIn:process.env.JWT_REFRESH_EXPIRATION}),
+            refreshToken: randToken.uid(256)
+        };
+        return result;
+    }
+    async asyncverify(auth){
+        let [token,_]=["",""]
+        if (auth){
+             [_,token]=auth.split("Bearer ")
+        }
+        if (!token){
+            return error_message.get(1,auth)
+        }
+        let decoded;
+        try {
+            decoded = jwt.verify(token, process.env.PASSWORD_SECRET_STRING);
+        } catch (err) {
+            if (err.name === 'TokenExpiredError') {
+                return error_message.get(2,auth)
+            } else if (err.name === 'JsonWebTokenError') {
+                return error_message.get(3,auth)
+            } else{
+                return error_message.get(4,auth)
+            }
+        }
+        return decoded;
+    }
+}
 
 module.exports={
-    User,
-    LocalUser
+    LocalUser,
+    SocialUser,
 }

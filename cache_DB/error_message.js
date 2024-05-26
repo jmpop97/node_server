@@ -12,7 +12,9 @@ async function get(i,input=""){
         cache.set(value.id,value)
     }
     let{at,response,detail,intro}=value
-    console.log(JSON.stringify({at,i,intro,input:input}, null, 2))
+    if (i!=1){
+        console.log(JSON.stringify({at,i,intro,input:input}, null, 2))
+    }
     return {response,detail}
 }
 
