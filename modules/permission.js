@@ -1,4 +1,4 @@
-const {UserPermission,PermissionAPI} = require('../models')
+const {Permission_User,PermissionAPI} = require('../models')
 const { Op } = require("sequelize");
 
 const error_message = require("../cache_DB/error_message")
@@ -73,10 +73,10 @@ async function createPermissionAPI(body,type){
 }
 
 
-async function createUserPermission(body,type){
+async function createPermission_User(body,type){
     let response
     let add_perm=body.permission
-    let user =await UserPermission.findAll({
+    let user =await Permission_User.findAll({
         attributes:['authName'],
         where:{userId:body.id}
         })
@@ -96,7 +96,7 @@ async function createUserPermission(body,type){
     }
     if(type=="update"){
         if (all!=[]){
-            await UserPermission.destroy(
+            await Permission_User.destroy(
                 {where:{
                     userId:body.id,
                     authName:{
@@ -112,7 +112,7 @@ async function createUserPermission(body,type){
                 })
             }
         }
-    await UserPermission.bulkCreate(
+    await Permission_User.bulkCreate(
     add,
     )
     .then((comment) => {
@@ -125,6 +125,6 @@ async function createUserPermission(body,type){
 }
 module.exports = {
     PermissionAPICheck,
-    createUserPermission,
+    createPermission_User,
     createPermissionAPI,
 }

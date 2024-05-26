@@ -13,7 +13,7 @@ router.post("/user",async(req,res)=>{
     if (!body.id){
         return res.send(await error_message.get(21))
     }
-    response = await Permission.createUserPermission(body,type)
+    response = await Permission.createPermission_User(body,type)
     return res.send(response)
 })
 

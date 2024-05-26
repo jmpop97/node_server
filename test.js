@@ -4,24 +4,8 @@ const seed_db=require("./modules/seedDB")
 const models=require("./models")
 
 async function test(){
-    x=await models.User.findByPk(
-        "Localid1",
-        {include:[{
-            model:models.Status,
-            attributes:['stateName']
-    },
-    {
-        attributes:['authName'],
-        model:models.Permission,
-        through: {
-            attributes: [],
-          },
-    }]
-    })
-    .then((comment) => {
-        console.log(comment)
-    })
+    let adds=await seed_db.seed_data('Permissions')
+    console.log(adds[2].authName)
 }
-
 
 test()

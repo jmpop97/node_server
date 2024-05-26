@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       //user
-      this.hasMany(models.UserPermission,{foreignKey:"authName"})
+      this.hasMany(models.Permission_User,{foreignKey:"authName"})
       this.belongsToMany(models.User,{
-          through:models.UserPermission,
+          through:models.Permission_User,
           foreignKey:'authName',
           type:DataTypes.STRING,
       })
