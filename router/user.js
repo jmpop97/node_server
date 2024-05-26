@@ -1,11 +1,6 @@
 let express = require("express")
 const router = express.Router();
 
-const { Op } = require('sequelize');
-const models = require("../models")
-
-const jwt = require("../modules/jwt")
-const search_user =require('../modules/user_search')
 const user_update = require('../modules/user_update');
 const user_search = require("../modules/user_search");
 const User = require("../modules/user")
