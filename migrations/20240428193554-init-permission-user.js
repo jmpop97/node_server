@@ -24,7 +24,7 @@ module.exports = {
     //   authName: 'User',
     // }], {})
 
-    await queryInterface.createTable('UserPermissions',{
+    await queryInterface.createTable('Permission_Users',{
       id:{          
         allowNull: false,
         autoIncrement: true,
@@ -36,7 +36,6 @@ module.exports = {
         model:'Users',
         key:'id'
       },
-      defaultValue:2,
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
@@ -46,6 +45,7 @@ module.exports = {
         model:'Permissions',
         key:'authName'
       },
+      defaultValue:adds[1].authName,
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     }
@@ -61,7 +61,8 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('UserPermissions')
+    // await queryInterface.dropTable('UserPermissions')
+    await queryInterface.dropTable('Permission_Users')
     // await queryInterface.removeColumn('Users','permissions')
     await queryInterface.dropTable('Permissions');
     /**

@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class UserPermission extends Model {
+  class Permission_User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Permission,{foreignKey:'authName'});
     }
   }
-  UserPermission.init({
+  Permission_User.init({
     userId:{
     type: DataTypes.STRING,
     allowNull:false
@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
         },
   }, {
     sequelize,
-    modelName: 'UserPermission',
+    modelName: 'Permission_User',
     timestamps:false
   });
-  return UserPermission;
+  return Permission_User;
 };

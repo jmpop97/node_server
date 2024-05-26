@@ -5,10 +5,11 @@ const jwt = require('jsonwebtoken');
 const randToken = require('rand-token');
 
 class User{
-    constructor(id,password,email,authName="User"){
+    constructor(id,password,email,state,authName="User"){
         this.id=id;
         this.password=password;
         this.email=email;
+        this.state=state;
         this.authName=authName;
     }
     async logUp(){
@@ -27,7 +28,7 @@ class User{
             res=error_message.get(9,{id,password,email,authName,error})
         });
         if (res.response==200){
-            await models.UserPermission.create({userId:id,authName:authName})
+            await models.Permission_User.create({userId:id,authName:authName})
             .catch((error)=>{
                 res=error_message.get(8,{id,authName,error})})
             }
@@ -69,6 +70,10 @@ class User{
             res=error_message.get(12,{id,error});
         });
         return res
+    }
+    async patch(){
+        let{id,password,authName}=this
+        let patch={id,password,authName}
     }
 }
 class LocalUser extends User{
