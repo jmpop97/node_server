@@ -107,7 +107,7 @@ class JWT{
         };
         return result;
     }
-    async asyncverify(auth){
+    async verify(auth){
         let [token,_]=["",""]
         if (auth){
              [_,token]=auth.split("Bearer ")
@@ -134,4 +134,5 @@ class JWT{
 module.exports={
     LocalUser,
     SocialUser,
+    JWT
 }
