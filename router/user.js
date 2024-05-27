@@ -5,6 +5,9 @@ const user_search = require("../modules/user_search");
 const User = require("../modules/user")
 router.post("",async (req,res)=>{
     //createUser
+    if (!req.log_in_user.auth?.includes("Admin")){
+        req.body.authNames=["User"]
+    }
     let response=await new User.LocalUser(req.body).logUp()
     return res.send(response)
 })
@@ -20,7 +23,7 @@ router.get("",async(req,res)=>{
 router.get("/ids",async (req,res)=>{
     //UserQuery
     let {type,id}=req.body
-    let log_in_user =await jwt.verify(req.headers.authorization)
+    let log_in_user = req.log_in_user.id
     let body={"id":id,"log_in_user":log_in_user.id}
     if (log_in_user.response){
         return res.send(log_in_user)
@@ -30,7 +33,7 @@ router.get("/ids",async (req,res)=>{
 })
 
 router.patch("/",async (req,res)=>{
-    req.body.id=req.log_in_user.id
+
     let response=await Promise.all([
         new User.User(req.body).patch(),
         new User.UserInfo(req.body).patch()

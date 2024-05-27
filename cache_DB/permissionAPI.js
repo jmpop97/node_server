@@ -24,6 +24,11 @@ async function get(i){
             value=db.Permissions.map(Permissions=>Permissions.authName)
             cache.set(i,value)
         }
+        else{
+            console.log(i,"permission존재하지 않음")
+            value=["All"]
+            
+        }
     }
     return value
 }
