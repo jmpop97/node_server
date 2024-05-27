@@ -7,22 +7,28 @@ const { response } = require('express');
 
 class User{
     constructor(params){
-        let {id,password,email,state,authNames}=params
+        let {id,password,email,state,authNames,birthDay,intro}=params
         this.id=id;
         this.password=password;
         this.email=email;
         this.state=state;
         this.authNames=authNames;
+        this.birthDay=birthDay
+        this.intro=intro
     }
     async logUp(){
-        let {id,password,email,authNames}=this
+        let {id,password,email,authNames,birthDay,intro}=this
         let res
         let hashpassword = await new Password().hashPassword(id,password)
         let create_id = {
             id: id,
             password: hashpassword,
             email: email,
-            UserInfo:{userId:id},
+            UserInfo:{
+                userId:id,
+                birthDay:birthDay,
+                intro:intro
+            },
         };
         res={ "response": 200 };
         await models.User.create(create_id,{include:[models.UserInfo]})
@@ -31,7 +37,7 @@ class User{
             res=error_message.get(9,this)
         });
         if (res.response==200){
-            let add_permissions=this.authNames?.map(perm=>{return {userId:id,authName:perm}})
+            let add_permissions=authNames?.map(perm=>{return {userId:id,authName:perm}})
             await models.Permission_User.bulkCreate(add_permissions)
             .catch((error)=>{
                 this.error=error
@@ -132,12 +138,15 @@ class SocialUser extends User{
 
 class UserInfo{
     constructor(params){
-        this.birthday
-        this.intro
+        let{id,birthDay,intro}=params
+        this.id=id
+        this.birthDay=birthDay
+        this.intro=intro
     }
     async patch(){
         let res={response:200,at:["birthday","intro"]}
-        await models.User.update(this,{where:{id:this.id}})
+        console.log(this)
+        await models.UserInfo.update(this,{where:{userId:this.id}})
         .catch((error)=>{
             delete this.password
             this.error=error
