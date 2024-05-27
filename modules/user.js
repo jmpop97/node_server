@@ -15,6 +15,10 @@ class User{
         this.authNames=authNames;
         this.birthDay=birthDay
         this.intro=intro
+
+        if(authNames){
+            this.authNames=["User"]
+        }
     }
     async logUp(){
         let {id,password,email,authNames,birthDay,intro}=this
@@ -67,7 +71,11 @@ class User{
             ]
         })
         .then((comment) => {
-            if (hashpassword===comment.password){
+            if (comment.state==="Deactivate"){
+                console.log("work")
+                res=error_message.get(30,{id});
+            }
+            else if (hashpassword===comment.password){
                 const user_data = new JWT().sign(comment)
                 .then(user_data=>
                     res={ "response": 200, "user": user_data}
@@ -99,8 +107,8 @@ class User{
         )
         return res
     }
-    async disactive(){
-        let {id} = this
+    async deactivate(id){
+        let res={response:200}
         await models.User.update(
             {
                 state:"Deactivate"
@@ -109,18 +117,19 @@ class User{
                 where:{id}
             }
             )
-        .catch((error)=>
-            res=error_message.get(27,{id,error}
-
-            ))
-        res={response:200}
+        .catch((error)=>{
+            this.error=error
+            res=error_message.get(27,id)
+        }
+        )
+        return res
     }
 }
 
 
 class LocalUser extends User{
     constructor(params){
-        params.id="Local"+params.id
+        params.id="Local_"+params.id
         super(params)
     }
 }
@@ -129,10 +138,49 @@ class LocalUser extends User{
 class SocialUser extends User{
     
     constructor(params){
-        params.id="Social"+params.id;
+        params.id=params.type+"_"+params.email;
         params.password="password"
         super(params)
     }
+    async logIn(){
+        let res={response:200}
+        let {id,password}=this
+        let hashpassword = await new Password().hashPassword(id,password)
+        await models.User.findByPk(
+            id,
+            {
+                include:[
+                {
+                    model:models.Permission,
+                    through:{
+                        attribute:[]
+                    }
+                },
+            ]
+        })
+        .then((comment) => {
+            if (comment.state==="Deactivate"){
+                console.log("work")
+                res=error_message.get(30,{id});
+            }
+            else if (hashpassword===comment.password){
+                const user_data = new JWT().sign(comment)
+                .then(user_data=>
+                    res={ "response": 200, "user": user_data}
+                )
+            }
+            else{
+                res=error_message.get(11,{id});
+            }        
+        })
+        .catch(async (error) => {
+            console.log(error)
+            await super.logUp()
+            return await  super.logIn()
+        });
+        return res
+    }
+
 }
 
 
