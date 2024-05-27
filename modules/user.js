@@ -12,10 +12,10 @@ class User{
         this.password=password;
         this.email=email;
         this.state=state;
-        this.authName=authNames;
+        this.authNames=authNames;
     }
     async logUp(){
-        let {id,password,email,authName}=this
+        let {id,password,email,authNames}=this
         let res
         let hashpassword = await new Password().hashPassword(id,password)
         let create_id = {
@@ -27,12 +27,15 @@ class User{
         res={ "response": 200 };
         await models.User.create(create_id,{include:[models.UserInfo]})
         .catch(error => {
-            res=error_message.get(9,{id,password,email,authName,error})
+            this.error=error
+            res=error_message.get(9,this)
         });
         if (res.response==200){
-            await models.Permission_User.bulkCreate({userId:id,authName:authName})
+            let add_permissions=this.authNames?.map(perm=>{return {userId:id,authName:perm}})
+            await models.Permission_User.bulkCreate(add_permissions)
             .catch((error)=>{
-                res=error_message.get(8,{id,authName,error})})
+                this.error=error
+                res=error_message.get(8,this)})
             }
         return res
     }

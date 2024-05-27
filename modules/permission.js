@@ -5,7 +5,7 @@ const error_message = require("../cache_DB/error_message")
 const permissionAPI = require("../cache_DB/permissionAPI")
 
 async function PermissionAPICheck(api,user_perm){
-    return true
+    // return true
     perms=await permissionAPI.get(api)
     if (!perms){
         return undefined
