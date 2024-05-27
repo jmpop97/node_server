@@ -1,7 +1,7 @@
 let express = require("express")
 const router = express.Router();
 const api = require('../modules/api_request')
-
+const User =require('../modules/user')
 
 const kakaoOpt = {
     clientId: process.env.client_id,
@@ -17,8 +17,17 @@ router.get("/kakao", (req, res) => {
 
 
 router.get("/kakao/code",async (req, res) => {
-  x= await api.kakao_login(req.query?.code)
-  console.log(x)
+  let user= await api.kakao_login(req.query?.code)
+  if(!user["kakao_account"]?.email){
+    return res.send({response:400})
+    }
+  body={
+    type:"Kakao",
+    email:user["kakao_account"]?.email,
+    authNames:["User"]
+  }
+  let response = await new User.SocialUser(body).logIn()
+  res.send(response)
 });
 
 module.exports = router
