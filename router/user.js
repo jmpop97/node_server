@@ -1,20 +1,18 @@
 let express = require("express")
 const router = express.Router();
 
-const user_update = require('../modules/user_update');
 const user_search = require("../modules/user_search");
 const User = require("../modules/user")
 router.post("",async (req,res)=>{
     //createUser
-    let {id,password,email} = req.body;
-    let response=await new User.LocalUser(id,password,email).logUp()
+    let response=await new User.LocalUser(req.body).logUp()
     return res.send(response)
 })
 
 router.get("",async(req,res)=>{
     //log in
     let {id,password} = req.body;
-    let response = await new User.LocalUser(id,password).logIn()
+    let response = await new User.LocalUser(req.body).logIn()
     res.send(response)
 })
 
@@ -32,28 +30,20 @@ router.get("/ids",async (req,res)=>{
 })
 
 router.patch("/",async (req,res)=>{
-    let {password,email,birthDay}=req.body
-    let log_in_user =await jwt.verify(req.headers.authorization)
-    let body={
-        id:log_in_user.id,
-        password:password,
-        email:email,
-        birthDay:birthDay}
-    if (log_in_user.response){
-        return res.send(body)
-    }
-    let response = await user_update.patch(body)
-    return res.send(response)
+    req.body.id=req.log_in_user.id
+    let response=await Promise.all([
+        new User.User(req.body).patch(),
+        new User.UserInfo(req.body).patch()
+    ])
+
+    return res.send(response)    
+
 
 })
 
 
 router.delete("/",async(req,res)=>{
-    let log_in_user =req.log_in_user
-    let body={
-        id:log_in_user.id,
-        }
-    let response = await user_update.delete(body,del=true)
+    let response = await new User.User(req.log_in_user.id).disactive()
     return res.send(response)
 })
 

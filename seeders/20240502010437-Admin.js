@@ -11,7 +11,7 @@ module.exports = {
     let password="admin"
     let email="admin@naver.com"
     let admin="Admin"
-    await new User.LocalUser(id,password,email).logUp()
+    await new User.LocalUser({id,password,email}).logUp()
 
 
 

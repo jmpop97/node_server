@@ -3,14 +3,16 @@ const models = require('../models')
 const error_message=require('../cache_DB/error_message')
 const jwt = require('jsonwebtoken');
 const randToken = require('rand-token');
+const { response } = require('express');
 
 class User{
-    constructor(id,password,email,state,authName="User"){
+    constructor(params){
+        let {id,password,email,state,authNames}=params
         this.id=id;
         this.password=password;
         this.email=email;
         this.state=state;
-        this.authName=authName;
+        this.authName=authNames;
     }
     async logUp(){
         let {id,password,email,authName}=this
@@ -28,7 +30,7 @@ class User{
             res=error_message.get(9,{id,password,email,authName,error})
         });
         if (res.response==200){
-            await models.Permission_User.create({userId:id,authName:authName})
+            await models.Permission_User.bulkCreate({userId:id,authName:authName})
             .catch((error)=>{
                 res=error_message.get(8,{id,authName,error})})
             }
@@ -72,19 +74,74 @@ class User{
         return res
     }
     async patch(){
-        let{id,password,authName}=this
-        let patch={id,password,authName}
+        let res={response:200,at:["password","email","authName"]}
+        if (this.password){
+            this.password=await new Password().hashPassword(this.id,this.password)
+        }
+        else{
+            delete this.password
+        }
+        await models.User.update(this,{where:{id:this.id}})
+        .catch((error)=>{
+            delete this.password
+            this.error=error
+            res=error_message.get(28,this)
+        }
+        )
+        return res
     }
-}
-class LocalUser extends User{
-    constructor(id,password,email,authName="User"){
-        super("Local"+id,password,email,authName)
+    async disactive(){
+        let {id} = this
+        await models.User.update(
+            {
+                state:"Deactivate"
+            },
+            {
+                where:{id}
+            }
+            )
+        .catch((error)=>
+            res=error_message.get(27,{id,error}
+
+            ))
+        res={response:200}
     }
 }
 
+
+class LocalUser extends User{
+    constructor(params){
+        params.id="Local"+params.id
+        super(params)
+    }
+}
+
+
 class SocialUser extends User{
-    constructor(id,password,email,authName="User"){
-        super("Social"+email,"password",email,authName)
+    
+    constructor(params){
+        params.id="Social"+params.id;
+        params.password="password"
+        super(params)
+    }
+}
+
+
+class UserInfo{
+    constructor(params){
+        this.birthday
+        this.intro
+    }
+    async patch(){
+        let res={response:200,at:["birthday","intro"]}
+        await models.User.update(this,{where:{id:this.id}})
+        .catch((error)=>{
+            delete this.password
+            this.error=error
+            res=error_message.get(29,this)
+        }
+        )
+        return res
     }
 }
 
@@ -137,7 +194,9 @@ class JWT{
 }
 
 module.exports={
+    User,
     LocalUser,
     SocialUser,
-    JWT
+    JWT,
+    UserInfo
 }
