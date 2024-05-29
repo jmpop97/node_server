@@ -1,4 +1,5 @@
-async function x_www_form(method,body,url){
+async function request_form(params){
+  let{url,method,headers,body}=params
     var formBody = [];
     for (var property in body) {
       var encodedKey = encodeURIComponent(property);
@@ -8,44 +9,60 @@ async function x_www_form(method,body,url){
     formBody = formBody.join("&");
     response=await fetch(url,{
         method:method,
-        headers:{
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
+        headers:headers,
         body: formBody
       })
     jsonData = await response.json();
     return jsonData
 }
 
-async function combine_auth(method,body,token,url){
-    var formBody = [];
-    for (var property in body) {
-      var encodedKey = encodeURIComponent(property);
-      var encodedValue = encodeURIComponent(body[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
-    }
-    formBody = formBody.join("&");
-    response=await fetch(url,{
-        method:method,
-        headers:{
-            Authorization : "Bearer " +token
-        },
-        body: formBody
-      })
-    jsonData = await response.json();
-    return jsonData
-}
 
 async function kakao_login(code){
-    var details = {
+  url = 'https://kauth.kakao.com/oauth/token'
+  method = 'POST'
+  headers = {
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+  }
+  body = {
         'grant_type': 'authorization_code',
-        'client_id': process.env.client_id,
-        'redirect_uri': process.env.redirect_uri,
+        'client_id': process.env.kakao_client_id,
+        'redirect_uri': process.env.kakao_redirect_uri,
         'code':code,
         // 'scope':'openid account_email'
     };
-    token = await x_www_form('POST',details,'https://kauth.kakao.com/oauth/token')
-    return combine_auth('POST',{},token.access_token,'https://kapi.kakao.com/v2/user/me')
+    token = await request_form({url,method,headers,body})
+
+    url = 'https://kapi.kakao.com/v2/user/me'
+    method = 'POST',
+    headers={
+      Authorization : "Bearer " +token.access_token
+    }
+    return request_form({url,method,headers})
 }
 
-module.exports={kakao_login}
+async function google_login(code){
+  url='https://oauth2.googleapis.com/token'
+  method='POST'
+  headers={
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+  }
+  body={
+    grant_type: 'authorization_code',
+    client_id:process.env.google_client_id,
+    client_secret:process.env.google_clientSecret,
+    redirect_uri:process.env.google_redirect_uri,
+    code:code,
+    }
+
+  token = await request_form({url,method,headers,body})
+
+  url=`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token.access_token}`
+  method='POST'
+ return await request_form({url,method})
+  
+}
+
+module.exports={
+  kakao_login,
+  google_login
+}
