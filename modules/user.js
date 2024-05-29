@@ -72,7 +72,6 @@ class User{
         })
         .then((comment) => {
             if (comment.state==="Deactivate"){
-                console.log("work")
                 res=error_message.get(30,{id});
             }
             else if (hashpassword===comment.password){
@@ -138,7 +137,8 @@ class LocalUser extends User{
 class SocialUser extends User{
     
     constructor(params){
-        params.id=params.type+"_"+params.email;
+        let {type,email}=params
+        params.id=type+"_"+email;
         params.password="password"
         super(params)
     }
@@ -160,21 +160,14 @@ class SocialUser extends User{
         })
         .then((comment) => {
             if (comment.state==="Deactivate"){
-                console.log("work")
                 res=error_message.get(30,{id});
             }
-            else if (hashpassword===comment.password){
-                const user_data = new JWT().sign(comment)
+            const user_data = new JWT().sign(comment)
                 .then(user_data=>
                     res={ "response": 200, "user": user_data}
                 )
-            }
-            else{
-                res=error_message.get(11,{id});
-            }        
         })
         .catch(async (error) => {
-            console.log(error)
             await super.logUp()
             return await  super.logIn()
         });
@@ -193,7 +186,6 @@ class UserInfo{
     }
     async patch(){
         let res={response:200,at:["birthday","intro"]}
-        console.log(this)
         await models.UserInfo.update(this,{where:{userId:this.id}})
         .catch((error)=>{
             delete this.password
