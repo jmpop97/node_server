@@ -1,10 +1,12 @@
 {
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "node-cache": "^5.1.2",
+    "nodemailer": "^6.9.13",
     "pg": "^8.11.5",
     "pg-hstore": "^2.3.4",
     "rand-token": "^1.0.1",
@@ -21,6 +23,5 @@
   "main": "server.js",
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {}
+  "license": "ISC"
 }
