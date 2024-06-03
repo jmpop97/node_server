@@ -9,7 +9,10 @@ async function get(i,input=""){
     value = cache.get(i)
     if (value==undefined){
         value = await ErrorMessage.findOne({where:{id:i}})
-        cache.set(value.id,value)
+        if (!value){
+            value={intro:"존재하지 않는 에러"}
+        }
+        cache.set(i,value)
     }
     let{at,response,detail,intro}=value
     if (i!=1){
