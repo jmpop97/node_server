@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer');
 const fs = require('node:fs');  
 const cheerio = require('cheerio');
-const { transferableAbortController } = require('node:util');
 const email_dir='./email_form'
 const files = fs.readdirSync(email_dir)
 
