@@ -4,6 +4,7 @@ const error_message=require('../cache_DB/error_message')
 const jwt = require('jsonwebtoken');
 const randToken = require('rand-token');
 const { response } = require('express');
+const {Email}=require('../modules/send_email')
 
 class User{
     constructor(params){
@@ -245,10 +246,68 @@ class JWT{
     }
 }
 
+class Authenfication{
+    constructor(params){
+        let {type,email,key}=params
+        this.type=type
+        this.email=email
+        this.key=key
+        console.log(email)
+    }
+    async existence(){
+        this.auth=await models.Authenfication.findOne({
+            where:{
+                type:this.type,
+                email:this.email
+            }
+        })
+        if(!this.auth){
+            return
+        }
+        this.auth.increment('count')
+    }
+    async AuthenficationCreate(){
+        await this.existence()
+        if (this.auth){
+            return error_message.get(31)
+        }
+        let title="서비스 이메일 확인"
+        let {email,type}=this
+        let key = crypto.randomBytes(20).toString('hex')
+        let auth = await models.Authenfication.create({
+            type,email,key
+        })
+        new Email({email,form:"normal_form",body:{key}})
+        setTimeout(this.deleteLog,60*60000,auth)
+        return error_message.get(0)
+    }
+
+    async AuthenficationAfter(){
+        await this.existence()
+        let {auth,key}=this
+        if(auth.count>5){
+            return 0
+        }
+        else if (auth.key==key){
+            auth.destroy()
+            return auth.email
+        }
+        else{
+            return 5-auth.count
+        }
+    }
+
+    async deleteLog(auth){
+        console.log("del")
+        auth.destroy()
+    }
+}
+
 module.exports={
     User,
     LocalUser,
     SocialUser,
     JWT,
-    UserInfo
+    UserInfo,
+    Authenfication
 }
