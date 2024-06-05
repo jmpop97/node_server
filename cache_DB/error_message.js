@@ -10,7 +10,9 @@ async function get(i,input=""){
     if (value==undefined){
         value = await ErrorMessage.findOne({where:{id:i}})
         if (!value){
-            value={intro:"존재하지 않는 에러"}
+            value={id:i,
+                response:"미정",
+                intro:"존재하지 않는 에러"}
         }
         cache.set(i,value)
     }
