@@ -2,7 +2,7 @@ let express = require("express")
 const router = express.Router();
 const api = require('../modules/api_request')
 const User =require('../modules/user')
-
+const error_message=require('../cache_DB/error_message')
 
 const kakaoOpt = {
     clientId: process.env.kakao_client_id,
@@ -17,6 +17,32 @@ const googleOpt ={
 }
 
 const googleAuthorizationUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleOpt.clientId}&redirect_uri=${googleOpt.redirectUri}&response_type=code&scope=profile email`
+
+router.get("/local",async(req,res)=>{
+  let {email}=req.query
+  type="createUser"
+  if (email){
+    response=await new User.Authenfication({email,type}).AuthenficationCreate()
+    return res.send(response)
+  }
+  return res.send(await error_message.get(32))
+})
+
+router.get("/local/verify",async(req,res)=>{
+  let {email,key}=req.query
+  type="createUser"
+  if (email){
+    left_count=await new User.Authenfication({email,type,key}).verify()
+    if (left_count<0){
+      response=await error_message.get(0)
+      }
+    else{
+      response={response:400,left_count}
+    }    
+    return res.send(response)
+  }
+  return res.send(await error_message.get(32))
+})
 
 router.get("/kakao", (req, res) => {
     res.redirect(kakaoLoginURL);

@@ -8,7 +8,7 @@ const {Email}=require('../modules/send_email')
 
 class User{
     constructor(params){
-        let {id,password,email,state,authNames,birthDay,intro}=params
+        let {id,password,email,state,authNames,birthDay,intro,key}=params
         this.id=id;
         this.password=password;
         this.email=email;
@@ -16,13 +16,17 @@ class User{
         this.authNames=authNames;
         this.birthDay=birthDay
         this.intro=intro
-
+        this.key=key
         if(authNames){
             this.authNames=["User"]
         }
     }
     async logUp(){
-        let {id,password,email,authNames,birthDay,intro}=this
+        let {id,password,email,authNames,birthDay,intro,key}=this
+        let email_verify=await new Authenfication({email,key,type:"createUser"}).verify(true)
+        if (email_verify>=0){
+            return error_message.get(33)
+        }
         let res
         let hashpassword = await new Password().hashPassword(id,password)
         let create_id = {
@@ -252,19 +256,19 @@ class Authenfication{
         this.type=type
         this.email=email
         this.key=key
-        console.log(email)
     }
     async existence(){
+        if (!this.email){
+            return
+        }
+        console.log(this)
         this.auth=await models.Authenfication.findOne({
             where:{
-                type:this.type,
+                // type:this.type,
                 email:this.email
             }
         })
-        if(!this.auth){
-            return
-        }
-        this.auth.increment('count')
+        console.log(this.auth)
     }
     async AuthenficationCreate(){
         await this.existence()
@@ -282,23 +286,29 @@ class Authenfication{
         return error_message.get(0)
     }
 
-    async AuthenficationAfter(){
+    async verify(del=false){
+        // return left_count, -1:true
         await this.existence()
         let {auth,key}=this
+        if (!auth){
+            return 0
+        }
         if(auth.count>5){
             return 0
         }
         else if (auth.key==key){
+            if (del){
             auth.destroy()
-            return auth.email
+            }
+            return -1
         }
         else{
+            this.auth.increment('count')
             return 5-auth.count
         }
     }
 
     async deleteLog(auth){
-        console.log("del")
         auth.destroy()
     }
 }
