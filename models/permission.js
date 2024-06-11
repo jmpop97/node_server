@@ -11,21 +11,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       //user
-      this.hasMany(models.Permission_User,{foreignKey:"authName"})
+      this.hasMany(models.Permission_User,{foreignKey:"authName",sourceKey:"authName"})
       this.belongsToMany(models.User,{
           through:models.Permission_User,
           foreignKey:'authName',
-          type:DataTypes.STRING,
+          sourceKey:'authName'
       })
       //api
-      this.hasMany(models.PermissionAPI,{foreignKey:"authName"})
+      this.hasMany(models.Permission_API,{foreignKey:"authName",sourceKey:"authName"})
       this.belongsToMany(
         models.API,{
-         through:models.PermissionAPI,
+         through:models.Permission_API,
          foreignKey:'authName',
+         sourceKey:'authName'
       });
       //article
-      this.hasMany(models.Permission_Article,{foreignKey:"authName"})
+      this.hasMany(models.Permission_Article,{foreignKey:"authName",sourceKey:"authName"})
       this.belongsToMany(
         models.Article,{
          through:models.Permission_Article,
@@ -35,10 +36,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Permission.init({
-    authName:{
-    primaryKey:true,
-    type: DataTypes.STRING,
-    allowNull: false,
+    permissionPk:{
+      type:DataTypes.INTEGER,
+      allowNull:false,
+      autoIncrement:true,
+      primaryKey:true
+    },
+      authName:{
+      primaryKey:true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   }, {
     sequelize,

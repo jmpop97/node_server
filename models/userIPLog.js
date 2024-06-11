@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.User,{foreignKey:"userId"})
+      this.belongsTo(models.User,{foreignKey:"userId",targetKey:"userId"})
     }
   }
   UserIPLog.init(
     {
-      id: {
+      userIpLogPk: {
         type:DataTypes.INTEGER,
         allowNull:false,
         autoIncrement:true,
@@ -25,11 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     userId:{
       type: DataTypes.STRING,
     },
-    IP:{
+    ip:{
       type: DataTypes.STRING,
       allowNull:false
     },
-    url:{
+    api:{
       type:DataTypes.STRING,
       allowNull:false
     }

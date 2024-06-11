@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   ErrorMessage.init({
-    id: {
+    errorMessagePk: {
       type:DataTypes.INTEGER,
       allowNull:false,
       autoIncrement:true,

@@ -9,15 +9,15 @@ router.use("", async (req, res, next)=>{
   //log_in
   let log_in_user = await new user.JWT().verify(req.headers.authorization)
   req.log_in_user=log_in_user
-  add={IP:req.ip,
+  add={ip:req.ip,
       userId:log_in_user.id,
-      url:req.method+req.url}
+      api:req.method+req.url}
   UserIPLog.create(add)
   //permission
-  if (add.url.slice(-1)=='/'){
-    add.url=add.url.slice(0,-1)
+  if (add.api.slice(-1)=='/'){
+    add.api=add.api.slice(0,-1)
   }
-  let bool_permission=await permission.PermissionAPICheck(add.url,log_in_user.auth)
+  let bool_permission=await permission.PermissionAPICheck(add.api,log_in_user.auth)
   if (bool_permission){
     next();
     }
@@ -30,7 +30,7 @@ router.use("", async (req, res, next)=>{
     }
   }
   else{
-    res.send(await error_message.get(20,add.url))
+    res.send(await error_message.get(20,add.api))
   }
   });
 

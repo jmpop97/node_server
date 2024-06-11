@@ -1,7 +1,6 @@
 'use strict';
 const seed_db=require("../modules/seedDB")
 const {Status}=require("../models")
-const { QueryInterface } = require('sequelize');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {

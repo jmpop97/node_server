@@ -5,7 +5,7 @@ const error_message=require('../cache_DB/error_message')
 async function all(){
     let res
     const result = await User.findAll({
-        attributes:["id","state"]
+        attributes:["userId","state"]
     })
     .then((comment) => {
         res={ "response": 200, "user": comment };
@@ -20,7 +20,7 @@ async function choice(body){
     let res
     const result =await User.findAll(
         {
-        attributes:["id","state"],
+        attributes:["userId","state"],
         where: {id : body.id}
     })
     .then((comment) => {
@@ -36,7 +36,7 @@ async function search_init(body){
     let res
     let id=body.id
     const result = await User.findAll({
-        attributes:["id","state"],
+        attributes:["userId","state"],
         where: {id : {[Op.startsWith] : id}}
     })
     .then((comment) => {
@@ -51,7 +51,7 @@ async function search_init(body){
 async function search_include(id){
     let res
     const result = await User.findAll({
-        attributes:["id","state"],
+        attributes:["userId","state"],
         where: {id : {[Op.substring] : id}}
     })
     .then((comment) => {
@@ -63,7 +63,8 @@ async function search_include(id){
     return res
 }
 module.exports ={
-    search: async(type,body)=>{
+    search: async(body)=>{
+        let {type}=body
         switch(type){
             default:
                 body.id=body.log_in_user

@@ -11,11 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.User,{foreignKey:'userId'});
-      this.belongsTo(models.Permission,{foreignKey:'authName'});
+      this.belongsTo(models.User,{foreignKey:'userId',targetKey:"userId"});
+      this.belongsTo(models.Permission,{foreignKey:'authName',targetKey:"authName"});
     }
   }
   Permission_User.init({
+    permission_userPk:{          
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     userId:{
     type: DataTypes.STRING,
     allowNull:false

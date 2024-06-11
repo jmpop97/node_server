@@ -8,7 +8,7 @@ router.post("/user",async(req,res)=>{
     let {id,permissions,type}=req.body
     let body={
         id:id,
-        permission:permissions
+        permissions:permissions
         }
     if (!body.id){
         return res.send(await error_message.get(21))
@@ -20,10 +20,10 @@ router.post("/user",async(req,res)=>{
 router.post("/api",async(req,res)=>{
     let {api,permissions,type}=req.body
     let body={
-        apiId:api,
+        apiName:api,
         permissions:permissions
         }
-    if (!body.apiId){
+    if (!body.apiName){
         return res.send(await error_message.get(21))
     }
     response = await Permission.createPermissionAPI(body,type)

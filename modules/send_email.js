@@ -10,7 +10,6 @@ for(var i = 0; i < files.length; i++){
     var file = files[i];
     var suffix = file.split('.'); // 확장자 추출
     if (suffix[1] === 'html'){
-        console.log(file)
         let html=fs.readFileSync(email_dir+'/'+file, 'utf8', (err, data) => {
             if (err) {
               console.error(file,err);

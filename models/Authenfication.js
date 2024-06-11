@@ -8,14 +8,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Authenfication.init({
-    id:{
+    authenficationId:{
         type:DataTypes.INTEGER,
         allowNull:false,
         autoIncrement:true,
         primaryKey:true
     },
     type:{
-      type:DataTypes.INTEGER
+      type:DataTypes.STRING
     },
     email:{
       type:DataTypes.STRING
