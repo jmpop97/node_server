@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasOne(models.UserInfo,{
         foreignKey:"userId",
-      allowNull:true});
+        sourceKey:"userId"});
       this.hasMany(models.UserIPLog,{
         foreignKey:"userId",
       allowNull:true});
@@ -20,21 +20,26 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey:"state",
       });
       this.hasMany(models.Permission_User,
-        { foreignKey:"userId"});
+        { foreignKey:"userId",sourceKey:"userId"});
       this.belongsToMany(
         models.Permission,{
           through:models.Permission_User,
           foreignKey:'userId',
-          type:DataTypes.STRING
+          sourceKey:"userId"
         }
       )
     }
   }
   User.init({
-    id:{
-    primaryKey:true,
-    type: DataTypes.STRING,
-    allowNull: false,
+    userPk:{
+      type:DataTypes.INTEGER,
+      primaryKey:true,
+      autoIncrement:true
+    },
+    userId:{
+      type: DataTypes.STRING,
+      unique:true,
+      allowNull: false,
     },
     password: {
       allowNull: false,

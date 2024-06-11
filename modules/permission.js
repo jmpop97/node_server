@@ -1,4 +1,4 @@
-const {Permission_User,PermissionAPI} = require('../models')
+const models = require('../models')
 const { Op } = require("sequelize");
 
 const error_message = require("../cache_DB/error_message")
@@ -22,18 +22,19 @@ async function PermissionAPICheck(api,user_perm){
 }
 
 async function createPermissionAPI(body,type){
+    console.log(body)
     let response
     let add_perm=body.permissions
-    let api =await PermissionAPI.findAll({
+    let api =await models.Permission_API.findAll({
         attributes:['authName'],
-        where:{apiId:body.apiId}
+        where:{apiName:body.apiName}
     })
     api=api.map(entity=>entity.authName)
     let all=[]; let add=[];
     for (i in add_perm){
         let b = add_perm[i]
         let _b={
-            apiId:body.apiId,authName:b
+            apiName:body.api,authName:b
         }
         if(api.includes(b)){
     }
@@ -44,9 +45,9 @@ async function createPermissionAPI(body,type){
     }
     if(type=="update"){
         if (all!=[]){
-        await PermissionAPI.destroy(
+        await models.Permission_API.destroy(
             {where:{
-                apiId:body.apiId,
+                apiName:body.apiName,
                 authName:{
                     [Op.notIn]:all
                 }
@@ -60,7 +61,7 @@ async function createPermissionAPI(body,type){
             })
         }
     }
-    await PermissionAPI.bulkCreate(
+    await models.Permission_API.bulkCreate(
     add,
     )
     .then((comment) => {
@@ -75,8 +76,8 @@ async function createPermissionAPI(body,type){
 
 async function createPermission_User(body,type){
     let response
-    let add_perm=body.permission
-    let user =await Permission_User.findAll({
+    let add_perm=body.permissions
+    let user =await models.Permission_User.findAll({
         attributes:['authName'],
         where:{userId:body.id}
         })
@@ -94,9 +95,10 @@ async function createPermission_User(body,type){
         }
         all.push(b)
     }
+    console.log(add_perm,JSON.stringify(user))
     if(type=="update"){
         if (all!=[]){
-            await Permission_User.destroy(
+            await models.Permission_User.destroy(
                 {where:{
                     userId:body.id,
                     authName:{
@@ -112,9 +114,8 @@ async function createPermission_User(body,type){
                 })
             }
         }
-    await Permission_User.bulkCreate(
-    add,
-    )
+    console.log(add)
+    await models.Permission_User.bulkCreate(add)
     .then((comment) => {
         response={response:200}
     })

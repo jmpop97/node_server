@@ -8,9 +8,9 @@ const { Op } = require("sequelize");
 async function get(i,input=""){
     value = cache.get(i)
     if (value==undefined){
-        value = await ErrorMessage.findOne({where:{id:i}})
+        value = await ErrorMessage.findOne({where:{errorMessagePk:i}})
         if (!value){
-            value={id:i,
+            value={errorMessagePk:i,
                 response:"미정",
                 intro:"존재하지 않는 에러"}
         }
@@ -24,15 +24,15 @@ async function get(i,input=""){
 }
 
 async function patch(i){
-    value = await ErrorMessage.findOne({where:{id:i}})
-    cache.set(value.id,value)
+    value = await ErrorMessage.findOne({where:{errorMessagePk:i}})
+    cache.set(i,value)
     return value
 }
 
 async function setAll(){
     db = await ErrorMessage.findAll({})
     for(j in db){
-        cache.set(db[j].id,db[j])
+        cache.set(db[j].errorMessagePk,db[j])
     }
     return db
 }

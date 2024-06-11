@@ -65,7 +65,7 @@ module.exports = {
         type:Sequelize.STRING,
         primaryKey:true
       },
-})
+    })
     await queryInterface.createTable('Tags', 
     {
       tag: {
@@ -98,7 +98,6 @@ module.exports = {
         }
       },
     }) 
-   
     await queryInterface.createTable('Permission_Articles',{
       id:{
         type:Sequelize.INTEGER,
@@ -121,7 +120,7 @@ module.exports = {
           key:"authName"
         }
       },
-})
+    })
 
 
 

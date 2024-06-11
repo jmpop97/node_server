@@ -17,7 +17,7 @@ router.patch("",async(req,res)=>{
         {
             at,response,detail,intro
         },
-        {where:{id}}
+        {where:{errorMessagePk:id}}
     )
     res.send(x)
 })

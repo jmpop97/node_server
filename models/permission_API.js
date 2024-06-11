@@ -7,29 +7,29 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       // define association here
-    //   this.belongsTo(models.User,{foreignKey:"userId"})
+      this.belongsTo(models.API,{foreignKey:"apiName",targetKey:"apiName"})
+      this.belongsTo(models.Permission,{foreignKey:"authName",targetKey:"authName"})
     }
   }
   PermissionAPI.init(
     {
-      id: {
+      permissionApiPk: {
         type:DataTypes.INTEGER,
-        allowNull:false,
         autoIncrement:true,
         primaryKey:true,
-        unique:true
       },
-      apiId: {
+      apiName: {
         type:DataTypes.STRING,
         allowNull:false
       },
       authName:{
         type:DataTypes.STRING,
+        allowNull:false
       }
      },
     {
     sequelize,
-    modelName: 'PermissionAPI',
+    modelName: 'Permission_API',
     timestamps:false,
   });
   return PermissionAPI;

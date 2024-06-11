@@ -11,16 +11,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.User,{foreignKey:"userId"})
+      this.belongsTo(models.User,{foreignKey:"userId",targetKey:"userId"})
     }
   }
   UserInfo.init({
-    userId:{
-    primaryKey:true,
-    type: DataTypes.STRING,
-    unique:true
+    userInfoPk:{
+      type:DataTypes.INTEGER,
+      primaryKey:true,
+      autoIncrement:true
     },
-    birthDay:{
+    userId:{
+    type: DataTypes.STRING,
+    unique:true,
+    allowNull:false
+    },
+    birthday:{
       type: DataTypes.DATE(6)
     },
     intro:{

@@ -1,4 +1,4 @@
-const {API,Permission} = require("../models")
+const models = require("../models")
 const NodeCache = require( "node-cache" );
 const cache = new NodeCache()
 const { Op } = require("sequelize");
@@ -8,15 +8,16 @@ const { Op } = require("sequelize");
 async function get(i){
     value = cache.get(i)
     if (value==undefined){
-        db = await await API.findOne(
+        db = await models.API.findOne(
             {
-                where:{apiId:i},
+                where:{apiName:i},
                 include:
                 {
-                    model:Permission,
+                    model:models.Permission,
                     through:{
                         attributes:[]
-                    }
+                    },
+                    attributes:['authName']
                 }
             }
         )
@@ -35,15 +36,16 @@ async function get(i){
 
 async function patch(i){
 
-    db = await await API.findOne(
+    db = await models.API.findOne(
         {
-            where:{apiId:i},
+            where:{apiName:i},
             include:
             {
-                model:Permission,
+                model:models.Permission,
                 through:{
                     attributes:[]
-                }
+                },
+                attributes:['authName']
             }
         }
     )
@@ -55,29 +57,31 @@ async function patch(i){
 }
 
 async function setAll(){
-    db = await API.findAll({include:
+    db = await models.API.findAll({include:
         {
-            model:Permission,
+            model:models.Permission,
             through:{
                 attributes:[]
-            }
+            },
+            attributes:['authName']
         }})
     for(j in db){
         value=db[j].Permissions.map(Permissions=>Permissions.authName)
-        cache.set(db[j].apiId,value)
+        cache.set(db[j].apiName,value)
     }
     return db
 }
 
 async function search(apiId){
-    db = await API.findAll({include:
+    db = await models.API.findAll({include:
         {
-            model:Permission,
+            model:models.Permission,
             through:{
                 attributes:[]
-            }
+            },
+            attributes:['authName']
         }},{
-        where:{apiId:{[Op.substring]:apiId}}
+        where:{apiName:{[Op.substring]:apiId}}
     })
     return db
 }

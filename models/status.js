@@ -17,10 +17,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Status.init({
+    statePk:{
+      type:DataTypes.INTEGER,
+      autoIncrement:true,
+      primaryKey:true
+    },
     stateName: {
       allowNull: false,
       unique:true,
-      primaryKey:true,
       type: DataTypes.STRING
     },
   }, {

@@ -8,34 +8,37 @@ const {Email}=require('../modules/send_email')
 
 class User{
     constructor(params){
-        let {id,password,email,state,authNames,birthDay,intro,key}=params
+        let {id,password,email,state,authNames,birthday,intro,key}=params
         this.id=id;
         this.password=password;
         this.email=email;
         this.state=state;
         this.authNames=authNames;
-        this.birthDay=birthDay
+        this.birthday=birthday
         this.intro=intro
         this.key=key
-        if(authNames){
+        if(!authNames){
             this.authNames=["User"]
         }
     }
-    async logUp(){
-        let {id,password,email,authNames,birthDay,intro,key}=this
-        let email_verify=await new Authenfication({email,key,type:"createUser"}).verify(true)
-        if (email_verify>=0){
-            return error_message.get(33)
+    async logUp(verify=false){
+        let {id,password,email,authNames,birthday,intro,key}=this
+        console.log(this)
+        if (verify){
+            let email_verify=await new Authenfication({email,key,type:"createUser"}).verify(true)
+            if (email_verify>=0){
+                return error_message.get(33)
+            }            
         }
         let res
         let hashpassword = await new Password().hashPassword(id,password)
         let create_id = {
-            id: id,
+            userId: id,
             password: hashpassword,
             email: email,
             UserInfo:{
                 userId:id,
-                birthDay:birthDay,
+                birthday:birthday,
                 intro:intro
             },
         };
@@ -63,15 +66,17 @@ class User{
         }
         
         let hashpassword = await new Password().hashPassword(id,password)
-        await models.User.findByPk(
-            id,
+        await models.User.findOne(
             {
+                where:{userId:id},
                 include:[
                 {
                     model:models.Permission,
                     through:{
-                        attribute:[]
-                    }
+                        attributes:[]
+                    },
+                    attributes:["authName"]
+
                 },
             ]
         })
@@ -102,7 +107,7 @@ class User{
         else{
             delete this.password
         }
-        await models.User.update(this,{where:{id:this.id}})
+        await models.User.update(this,{where:{userId:this.id}})
         .catch((error)=>{
             delete this.password
             this.error=error
@@ -118,7 +123,7 @@ class User{
                 state:"Deactivate"
             },
             {
-                where:{id}
+                where:{userId:id}
             }
             )
         .catch((error)=>{
@@ -151,19 +156,21 @@ class SocialUser extends User{
         let res={response:200}
         let {id,password}=this
         let hashpassword = await new Password().hashPassword(id,password)
-        await models.User.findByPk(
-            id,
+        await models.User.findOne(
             {
+                where:{userId:id},
                 include:[
                 {
                     model:models.Permission,
                     through:{
-                        attribute:[]
-                    }
+                        attributes:[]
+                    },
+                    attributes:["authName"]
                 },
             ]
         })
         .then((comment) => {
+            console.log(comment)
             if (comment.state==="Deactivate"){
                 res=error_message.get(30,{id});
             }
@@ -174,7 +181,8 @@ class SocialUser extends User{
         })
         .catch(async (error) => {
             await super.logUp()
-            return await  super.logIn()
+            res= await super.logIn()
+            console.log("work")
         });
         return res
     }
@@ -184,9 +192,9 @@ class SocialUser extends User{
 
 class UserInfo{
     constructor(params){
-        let{id,birthDay,intro}=params
+        let{id,birthday,intro}=params
         this.id=id
-        this.birthDay=birthDay
+        this.birthday=birthday
         this.intro=intro
     }
     async patch(){
@@ -214,7 +222,8 @@ class Password{
 class JWT{
     async sign(user){
         const payload = {
-            id: user.id,
+            userPk:user.userPk,
+            userId: user.userId,
             email: user.email,
             state: user.Status,
             auth: user.Permissions.map(entity=>entity.get("authName"))
@@ -261,14 +270,12 @@ class Authenfication{
         if (!this.email){
             return
         }
-        console.log(this)
         this.auth=await models.Authenfication.findOne({
             where:{
                 // type:this.type,
                 email:this.email
             }
         })
-        console.log(this.auth)
     }
     async AuthenficationCreate(){
         await this.existence()

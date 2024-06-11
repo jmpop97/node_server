@@ -20,12 +20,12 @@ router.get("",async(req,res)=>{
 
 
 router.get("/ids",async (req,res)=>{
-    let response=await user_search.search(type,body)
+    let response=await user_search.search(req.body)
     return res.send(response)
 })
 
 router.patch("/",async (req,res)=>{
-    req.body.id=req.log_in_user.id
+    req.body.id=req.log_in_user.userId
     let response=await Promise.all([
         new User.User(req.body).patch(),
         new User.UserInfo(req.body).patch()
@@ -35,7 +35,7 @@ router.patch("/",async (req,res)=>{
 
 
 router.delete("/",async(req,res)=>{
-    let response = await new User.User({}).deactivate(req.log_in_user.id)
+    let response = await new User.User({}).deactivate(req.log_in_user.userId)
     return res.send(response)
 })
 
