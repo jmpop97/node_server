@@ -26,7 +26,7 @@ module.exports = {
       }
     });
     let adds=await seed_db.seed_data('ErrorMessages')
-    await models.ErrorMessage.bulkCreate(adds)
+    // await models.ErrorMessage.bulkCreate(adds)
   },
 
   async down (queryInterface, Sequelize) {

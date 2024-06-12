@@ -5,19 +5,19 @@ const models=require("../models")
 module.exports = {
   async up (queryInterface, Sequelize) {
     let adds=await seed_db.seed_data('Status')
-    await queryInterface.createTable('Status', 
-    { statePk: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-    stateName: {
-      type: Sequelize.STRING,
-      unique:true,
-      allowNull:false
-    }})
-    await models.Status.bulkCreate(adds)
+    // await queryInterface.createTable('Status', 
+    // { statePk: {
+    //     allowNull: false,
+    //     autoIncrement: true,
+    //     primaryKey: true,
+    //     type: Sequelize.INTEGER,
+    //   },
+    // stateName: {
+    //   type: Sequelize.STRING,
+    //   unique:true,
+    //   allowNull:false
+    // }})
+    // await models.Status.bulkCreate(adds)
     await queryInterface.addColumn("Users","state",{
       type: Sequelize.STRING,
       defaultValue:adds[0]["stateName"],

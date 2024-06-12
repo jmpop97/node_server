@@ -52,8 +52,8 @@ module.exports = {
           onDelete: "CASCADE",
         }
         });
-    await models.API.bulkCreate(api,{updateOnDuplicate: ["apiPk"]})
-    await models.Permission_API.bulkCreate(adds)
+    // await models.API.bulkCreate(api,{updateOnDuplicate: ["apiPk"]})
+    // await models.Permission_API.bulkCreate(adds)
   },
 
   async down (queryInterface, Sequelize) {
