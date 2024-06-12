@@ -22,7 +22,7 @@ async function createArticle(body){
     else{
         await models.Tag.bulkCreate(
             data.Article_Tags
-            ,{updateOnDuplicate: ["tag"]}
+            ,{updateOnDuplicate: ["tagName"]}
         )
     }
     await models.Article.create(
@@ -61,7 +61,7 @@ async function patchArticle(body){
         delete data['ArticleImages']
     }
 
-    article= await models.Article.findByPk(data.articleId,
+    article= await models.Article.findByPk(data.articlePk,
     {include:[
     models.ArticleImage,
     models.Article_Tag,

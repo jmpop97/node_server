@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:true});
       this.belongsTo(models.Status,{
         foreignKey:"state",
+        targetKey:"stateName"
       });
       this.hasMany(models.Permission_User,
         { foreignKey:"userId",sourceKey:"userId"});

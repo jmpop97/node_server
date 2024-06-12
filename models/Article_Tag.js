@@ -5,12 +5,12 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Article_Tag extends Model {
     static associate(models) {
-      this.belongsTo(models.Article,{foreignKey:"articleId"})
-      this.belongsTo(models.Tag,{foreignKey:"tag"})
+      this.belongsTo(models.Article,{foreignKey:"articleId",targetKey:"articlePk"})
+      this.belongsTo(models.Tag,{foreignKey:"tagName",targetKey:"tagName"})
     }
   }
   Article_Tag.init({
-    id:{
+    articleTagPk:{
         type:DataTypes.INTEGER,
         allowNull:false,
         autoIncrement:true,
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     articleId:{
       type:DataTypes.INTEGER
     },
-    tag:{
+    tagName:{
       type:DataTypes.STRING
     }
   }, {

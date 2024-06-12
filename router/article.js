@@ -28,13 +28,14 @@ router.post("",async (req,res)=>{
             return res.send(400)
         }    
         let data={
-            creater:req.log_in_user?.id,
+            creater:req.log_in_user?.userId,
             state:"Active",
             title:req.body.title,
             text:req.body.text,
             tags:req.body.tags,
             images:[],
             permissions:['User']}
+            console.log(data)
         data.images=req.files?.map(x=>x.path)
         let article=await Article.createArticle(data);
         res.send(article)

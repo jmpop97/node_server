@@ -7,36 +7,43 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
         //creater
         this.belongsTo(models.User,{
-          foreignKey:"creater"
+          foreignKey:"creater",
+          targetKey:"userId",
         })
         //image
         this.hasMany(models.ArticleImage,{
-          foreignKey:"articleId"
+          foreignKey:"articleId",
+          sourceKey:"articlePk"
         });
         //tag
         this.hasMany(models.Article_Tag,{
-          foreignKey:"articleId"
+          foreignKey:"articleId",
+          sourceKey:"articlePk"
         })
         this.belongsToMany(models.Tag,{
           through:models.Article_Tag,
-          foreignKey:"articleId"
+          foreignKey:"articleId",
+          sourceKey:"articlePk"
         })
         //state
         this.belongsTo(models.Status,{
-          foreignKey:"state"
+          foreignKey:"state",
+          targetKey:"stateName"
         })
         //permission
         this.hasMany(models.Permission_Article,{
-          foreignKey:"articleId"
+          foreignKey:"articleId",
+          sourceKey:"articlePk"
         })
         this.belongsToMany(models.Permission,{
           through:models.Permission_Article,
-          foreignKey:"articleId"
+          foreignKey:"articleId",
+          sourceKey:"articlePk"
         })
     }
   }
   Article.init({
-    articleId: {
+    articlePk: {
       type:DataTypes.INTEGER,
       allowNull:false,
       autoIncrement:true,

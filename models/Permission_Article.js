@@ -5,12 +5,12 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Permission_Article extends Model {
     static associate(models) {
-      this.belongsTo(models.Article,{foreignKey:"articleId"})
-      this.belongsTo(models.Permission,{foreignKey:"authName"})
+      this.belongsTo(models.Article,{foreignKey:"articleId",targetKey:"articlePk"})
+      this.belongsTo(models.Permission,{foreignKey:"authName",targetKey:"authName"})
     }
   }
   Permission_Article.init({
-    id:{
+    permissionArticlePk:{
         type:DataTypes.INTEGER,
         allowNull:false,
         autoIncrement:true,
