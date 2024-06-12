@@ -22,7 +22,6 @@ async function PermissionAPICheck(api,user_perm){
 }
 
 async function createPermissionAPI(body,type){
-    console.log(body)
     let response
     let add_perm=body.permissions
     let api =await models.Permission_API.findAll({
@@ -95,7 +94,6 @@ async function createPermission_User(body,type){
         }
         all.push(b)
     }
-    console.log(add_perm,JSON.stringify(user))
     if(type=="update"){
         if (all!=[]){
             await models.Permission_User.destroy(
@@ -114,7 +112,6 @@ async function createPermission_User(body,type){
                 })
             }
         }
-    console.log(add)
     await models.Permission_User.bulkCreate(add)
     .then((comment) => {
         response={response:200}

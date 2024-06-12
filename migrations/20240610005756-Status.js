@@ -5,8 +5,7 @@ const models=require("../models")
 module.exports = {
   async up (queryInterface, Sequelize) {
     let adds=await seed_db.seed_data('Status')
-    await Promise.all([
-      queryInterface.createTable('Status', 
+    await queryInterface.createTable('Status', 
     { statePk: {
         allowNull: false,
         autoIncrement: true,
@@ -18,19 +17,12 @@ module.exports = {
       unique:true,
       allowNull:false
     }})
-    .then(async()=>
-      //fix seed DB
-      {
-      await models.Status.bulkCreate(adds)
-       }
-    ),
-      queryInterface.addColumn("Users","state",{
+    await models.Status.bulkCreate(adds)
+    await queryInterface.addColumn("Users","state",{
       type: Sequelize.STRING,
       defaultValue:adds[0]["stateName"],
       allowNull:false
       })
-    ])
-    
     await queryInterface.addConstraint("Users",{
       fields:["state"],
       type:"foreign key",

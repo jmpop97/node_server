@@ -15,7 +15,7 @@ async function seed(){
     await new User.LocalUser(admin).logUp(true)
 
     let adds=await seed_db.seed_data('ErrorMessages')
-    await models.ErrorMessage.bulkCreate(adds)
+    // await models.ErrorMessage.bulkCreate(adds,{updateOnDuplicate: ["apiPk"]})
     console.log("end")
     
 
