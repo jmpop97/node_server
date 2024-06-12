@@ -23,7 +23,6 @@ class User{
     }
     async logUp(verify=false){
         let {id,password,email,authNames,birthday,intro,key}=this
-        console.log(this)
         if (verify){
             let email_verify=await new Authenfication({email,key,type:"createUser"}).verify(true)
             if (email_verify>=0){
@@ -170,7 +169,6 @@ class SocialUser extends User{
             ]
         })
         .then((comment) => {
-            console.log(comment)
             if (comment.state==="Deactivate"){
                 res=error_message.get(30,{id});
             }
@@ -182,7 +180,6 @@ class SocialUser extends User{
         .catch(async (error) => {
             await super.logUp()
             res= await super.logIn()
-            console.log("work")
         });
         return res
     }

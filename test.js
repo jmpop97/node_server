@@ -1,4 +1,4 @@
-// require('dotenv').config();
+require('dotenv').config();
 // const user = require("./modules/user")
 // const seed_db=require("./modules/seedDB")
 const models=require("./models")
@@ -11,28 +11,9 @@ const { Op } = require("sequelize");
 const User =require('./modules/user');
 const Article = require("./models/Article");
 async function Test(){
-    data ={
-        title:"제목",
-        text:"내용",
-        state:"Active",
-        creater:"Local_id1",
-        // ArticleImages:[{image:"2"}],
-        Article_Tags:[{tagName:"test"}],
-        Permission_Articles:[{authName:"User"}]
-    }
-    await models.Tag.bulkCreate(
-        data.Article_Tags
-        ,{updateOnDuplicate: ["tagName"]}
-    )
-    let db = await models.Article.create(
-        data,{
-            include:[
-                models.ArticleImage,
-                models.Article_Tag,
-                models.Permission_Article,
-            ]
-        }
-        )
+
+    let adds=await seed_db.seed_data('Status')
+    let db = models.Status.bulkCreate(adds)
     console.log(JSON.stringify(await db,2,0))
 }
 
