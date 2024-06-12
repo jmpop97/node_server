@@ -16,7 +16,7 @@ module.exports = {
         unique:true,
         allowNull:false,
       }})
-  await models.Permission.bulkCreate(adds)
+  // await models.Permission.bulkCreate(adds)
   await queryInterface.createTable('Permission_Users',{
     permission_userPk:{          
       autoIncrement: true,
