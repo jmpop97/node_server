@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.TEXT
       }
     });
-    let adds=await seed_db.seed_data('ErrorMessages')
+    // let adds=await seed_db.seed_data('ErrorMessages')
     // await models.ErrorMessage.bulkCreate(adds)
   },
 
