@@ -1,9 +1,8 @@
 const nodemailer = require('nodemailer');
-const fs = require('node:fs');  
+const fs = require('fs');  
 const cheerio = require('cheerio');
-const email_dir='./email_form'
+const email_dir=__dirname+'/../email_form'
 const files = fs.readdirSync(email_dir)
-
 //email_from setting
 let email_forms = {}
 for(var i = 0; i < files.length; i++){
