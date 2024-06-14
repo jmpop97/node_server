@@ -9,6 +9,9 @@ const articleRouter = require("./router/article")
 const all_apiRouter =require("./router/all_api")
 const authRouter =require("./router/auth")
 
+app.get('/',(rep,res)=>{
+  res.send("hi")
+})
 
 app.set('port',port_num)
 app.use(express.json())

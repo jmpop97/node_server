@@ -6,13 +6,13 @@ const error_message=require('../cache_DB/error_message')
 
 const kakaoOpt = {
     clientId: process.env.kakao_client_id,
-    redirectUri: process.env.kakao_redirect_uri,
+    redirectUri: process.env.SERVER_ADDRESS+process.env.kakao_redirect_uri,
   };
 const kakaoLoginURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoOpt.clientId}&redirect_uri=${kakaoOpt.redirectUri}&response_type=code`;
 
 const googleOpt ={
   clientId: process.env.google_client_id,
-  redirectUri: process.env.google_redirect_uri,
+  redirectUri: process.env.SERVER_ADDRESS+process.env.google_redirect_uri,
 
 }
 
