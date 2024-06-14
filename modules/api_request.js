@@ -26,7 +26,7 @@ async function kakao_login(code){
   body = {
         'grant_type': 'authorization_code',
         'client_id': process.env.kakao_client_id,
-        'redirect_uri': process.env.kakao_redirect_uri,
+        'redirect_uri': process.env.SERVER_ADDRESS+process.env.kakao_redirect_uri,
         'code':code,
         // 'scope':'openid account_email'
     };
@@ -50,7 +50,7 @@ async function google_login(code){
     grant_type: 'authorization_code',
     client_id:process.env.google_client_id,
     client_secret:process.env.google_clientSecret,
-    redirect_uri:process.env.google_redirect_uri,
+    redirect_uri:process.env.SERVER_ADDRESS+process.env.google_redirect_uri,
     code:code,
     }
 
