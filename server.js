@@ -8,6 +8,7 @@ const errorMessageRouter =require("./router/error_message")
 const articleRouter = require("./router/article")
 const all_apiRouter =require("./router/all_api")
 const authRouter =require("./router/auth")
+require('./modules/EternalReturn')
 
 app.get('/',(rep,res)=>{
   res.send("hi")
