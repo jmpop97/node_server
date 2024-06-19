@@ -1,22 +1,10 @@
-require('dotenv').config();
-// const user = require("./modules/user")
-// const seed_db=require("./modules/seedDB")
-const models=require("./models")
-const seed_db=require("./modules/seedDB")
-const { Op } = require("sequelize");
-// const nodemailer = require('nodemailer');
-// const fs = require('node:fs');  
-// const cheerio = require('cheerio')
-// const {Email} = require('./modules/send_email')
-const User =require('./modules/user');
-const Article = require("./models/Article");
-async function Test(){
+const models = require("../models")
+const schedule = require('node-schedule');
+const job = schedule.scheduleJob('51 22 * * *', async function(){
     datas=await rank_datas()
     models.EternalReturn.create(datas)
-    console.log(datas)
-    // models.UserIPLog.create({userId:"Local_admin",ip:"!2",api:"test"})
-}
-
+    }
+)
 
 async function rank_datas(){
     data = await rank_data_page(2)
@@ -44,5 +32,6 @@ async function rank_data_page(page){
     data=await get_data.json()
     return data
 }
-
-Test()
+// const job2 = schedule.scheduleJob('00 20 * * *', function(){
+//     console.log('The answer to life, the universe, and everything2!');
+//   });
