@@ -4,6 +4,7 @@ const {UserIPLog} = require("../models")
 const permission = require("../modules/permission")
 const error_message=require('../cache_DB/error_message')
 const user=require('../modules/user')
+const test=require('../modules/EternalReturn')
 
 router.use("", async (req, res, next)=>{
   //log_in
@@ -12,7 +13,9 @@ router.use("", async (req, res, next)=>{
   add={ip:req.ip,
       userId:log_in_user.id,
       api:req.method+req.url}
-  UserIPLog.create(add)
+
+  // DB터질려고 한다./ 조정이 필요함
+  // UserIPLog.create(add)
   //permission
   if (add.api.slice(-1)=='/'){
     add.api=add.api.slice(0,-1)
