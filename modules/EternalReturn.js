@@ -1,6 +1,6 @@
 const models = require("../models")
 const schedule = require('node-schedule');
-const job = schedule.scheduleJob('51 22 * * *', async function(){
+const job = schedule.scheduleJob('00 09 * * *', async function(){
     datas=await rank_datas()
     models.EternalReturn.create(datas)
     }
