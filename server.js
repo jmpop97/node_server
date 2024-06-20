@@ -2,12 +2,7 @@ require('dotenv').config();
 const port_num=8000
 const express = require('express')
 const app = express()
-const userRouter= require("./router/user")
-const permissionRouter= require("./router/permission")
-const errorMessageRouter =require("./router/error_message")
-const articleRouter = require("./router/article")
 const all_apiRouter =require("./router/all_api")
-const authRouter =require("./router/auth")
 require('./modules/EternalReturn')
 
 app.get('/',(rep,res)=>{
@@ -16,14 +11,19 @@ app.get('/',(rep,res)=>{
 
 app.set('port',port_num)
 app.use(express.json())
-// app.use(express.urlencoded());
 app.use('/', all_apiRouter);
 
-app.use('/user',userRouter)
-app.use('/permission',permissionRouter)
-app.use('/error_message',errorMessageRouter)
-app.use('/article',articleRouter)
-app.use('/auth',authRouter)
+const fs = require('fs')
+const router_dir = __dirname+'/./router'
+const router_files = fs.readdirSync(router_dir)
+
+for(var i = 0; i < router_files.length; i++){
+  var file = router_files[i];
+  var suffix = file.split('.'); // 확장자 추출
+  if (suffix[1] === 'js'){
+      app.use('/'+suffix[0],require('./router/'+suffix[0]))
+}
+}
 
 
 app.listen(app.get('port'),()=>{
