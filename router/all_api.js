@@ -4,18 +4,30 @@ const {UserIPLog} = require("../models")
 const permission = require("../modules/permission")
 const error_message=require('../cache_DB/error_message')
 const user=require('../modules/user')
-
+const email=require('../modules/send_email')
 
 router.use("", async (req, res, next)=>{
   //log_in
   let log_in_user = await new user.JWT().verify(req.headers.authorization)
   req.log_in_user=log_in_user
-  add={ip:req.ip,
-      userId:log_in_user.id,
-      api:req.method+req.url}
 
+  if (req.ip!=log_in_user.ip){
+    body={
+      email :log_in_user.email,
+      form :"different_ip",
+      body :{1:req.ip+""}
+    }
+    // new email.Email().send("ip_error")
+    res.send(await error_message.get(31))
+    return
+  }
   // DB터질려고 한다./ 조정이 필요함
+  // add={ip:req.ip,
+  //     userId:log_in_user.id,
+  //     api:req.method+req.url}
   // UserIPLog.create(add)
+
+
   //permission
   if (add.api.slice(-1)=='/'){
     add.api=add.api.slice(0,-1)
