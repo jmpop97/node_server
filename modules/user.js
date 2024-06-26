@@ -152,7 +152,7 @@ class SocialUser extends User{
         params.password="password"
         super(params)
     }
-    async logIn(){
+    async logIn(ip){
         let res={response:200}
         let {id,password}=this
         let hashpassword = await new Password().hashPassword(id,password)
@@ -170,6 +170,7 @@ class SocialUser extends User{
             ]
         })
         .then((comment) => {
+            comment.ip=ip
             if (comment.state==="Deactivate"){
                 res=error_message.get(30,{id});
             }
@@ -180,7 +181,7 @@ class SocialUser extends User{
         })
         .catch(async (error) => {
             await super.logUp()
-            res= await super.logIn()
+            res= await super.logIn(ip)
         });
         return res
     }
