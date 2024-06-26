@@ -59,7 +59,7 @@ router.get("/kakao/code",async (req, res) => {
     email:user["kakao_account"]?.email,
     authNames:["User"]
   }
-  let response = await new User.SocialUser(body).logIn()
+  let response = await new User.SocialUser(body).logIn(req.ip)
   res.send(response)
 });
 
@@ -79,7 +79,7 @@ router.get("/google/code",async (req, res) => {
     email:user.email,
     authNames:["User"]
   }
-  let response = await new User.SocialUser(body).logIn()
+  let response = await new User.SocialUser(body).logIn(req.ip)
   res.send(response)
 });
 

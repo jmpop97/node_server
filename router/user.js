@@ -14,7 +14,7 @@ router.post("",async (req,res)=>{
 
 router.get("",async(req,res)=>{
     //log in
-    let response = await new User.LocalUser(req.body).logIn()
+    let response = await new User.LocalUser(req.body).logIn(req.ip)
     res.send(response)
 })
 

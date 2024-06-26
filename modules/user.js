@@ -56,7 +56,7 @@ class User{
             }
         return res
     }
-    async logIn(){
+    async logIn(ip){
         let {id,password}=this
         let res
         if (!id || !password){
@@ -84,6 +84,7 @@ class User{
                 res=error_message.get(30,{id});
             }
             else if (hashpassword===comment.password){
+                comment.ip=ip
                 const user_data = new JWT().sign(comment)
                 .then(user_data=>
                     res={ "response": 200, "user": user_data}
@@ -223,7 +224,8 @@ class JWT{
             userId: user.userId,
             email: user.email,
             state: user.Status,
-            auth: user.Permissions.map(entity=>entity.get("authName"))
+            auth: user.Permissions.map(entity=>entity.get("authName")),
+            ip:user.ip
         };
         //future: need user refresh token
         const result = {
