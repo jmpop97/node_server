@@ -62,7 +62,13 @@ async function google_login(code){
   
 }
 
+async function ip_location(ip){
+  x= await fetch(`https://nordvpn.com/wp-admin/admin-ajax.php?action=get_user_info_data&ip=${ip}`)
+  return x.json()
+}
+ip_location()
 module.exports={
   kakao_login,
-  google_login
+  google_login,
+  ip_location
 }

@@ -1,6 +1,5 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');  
-const cheerio = require('cheerio');
 const email_dir=__dirname+'/../email_form'
 const files = fs.readdirSync(email_dir)
 //email_from setting
@@ -32,7 +31,7 @@ class Email{
     constructor(params){
         let {email,form,body}=params
         this.email=email
-        this.form=form
+        this.form=form ? form : 'normal_form'
         this.body=body
         this.transporter=transporter
 
@@ -40,13 +39,9 @@ class Email{
     }
     async email_form(){
         let {form,body}=this
-        let email_form=cheerio.load(email_forms[form])
-        for(let key in body){
-            email_form(`div[id=${key}]`).text(body[key])
-        }
-        this.send(email_form.html())
+        let email_form=await this.html_dic()
+        this.send(email_form)
     }
-    
     async send(email_form){
         const mailOptions = {
         from: 'pjm970128@gmail.com', // 작성자
@@ -67,6 +62,30 @@ class Email{
           }
         });
     };
+    async html_dic(){
+    let html=email_forms[this.form]
+    let dic = this.body
+    let result=''
+    let times=html.length
+    for (i=0; i<times;i++){
+        let add=html[i]
+        if (add == '$' && html[i+1]=='{'){
+            i+=1
+            let adds=''
+            while(i<times){
+                i+=1
+                add=html[i]
+                if (html[i]=='}'){
+                    add=dic[adds] ? dic[adds] : ''
+                    break
+                }
+                adds+=add
+            }
+        }
+        result+=add
+    }
+    return result
+    }
 }
 
 

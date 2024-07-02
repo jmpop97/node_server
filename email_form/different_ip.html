@@ -9,11 +9,13 @@
 <body>
     <h3 style="margin: 10px 0px;">안녕하세요 사용자님!<br/>사용자님의 접속 위치가 변경 되었어요!</h3>
     <h2 style="margin: 10px 0px;">"위치 확인하기" 버튼을 눌러 지도를 열어보세요!</h2>
+    <h1 style="margin: 10px 0px;">ip : ${ip}</h1>
+    <h1 style="margin: 10px 0px;">location : ${location}</h1>
     <div style="width: 120px; height: 45px; margin: 45px 0px 30px 0px;">
-        <a href="{{LINK_URL}}" style="display: flex; justify-content: center; align-items: center; border: 1px solid rgb(170, 170, 170); border-radius: 8px; font-size: 16px; font-weight: bolder; color: rgb(0, 0, 0); text-decoration: none; padding: 12px 7px;">위치 확인하기</a>
+        <a href="${map_url}" style="display: flex; justify-content: center; align-items: center; border: 1px solid rgb(170, 170, 170); border-radius: 8px; font-size: 16px; font-weight: bolder; color: rgb(0, 0, 0); text-decoration: none; padding: 12px 7px;">위치 확인하기</a>
     </div>
     <div style="width: 600px; height: 360px; border: 1px solid rgb(170, 170, 170); border-radius: 8px; background-position: center; background-size: cover;">
-        <img src="cid:uniqueImageCID" alt="Embedded Image" style="width: 100%; height: 100%; background-position: center; background-size: cover; border-radius: 8px;">
+        <img src="${map_image_url}" alt="Embedded Image" style="width: 100%; height: 100%; background-position: center; background-size: cover; border-radius: 8px;">
     </div>
 </body>
 </html>

@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const randToken = require('rand-token');
 const { response } = require('express');
 const {Email}=require('../modules/send_email')
+const api=require('../modules/api_request')
+const kakao_map=require('../modules/kakao_map')
 
 class User{
     constructor(params){
@@ -284,7 +286,7 @@ class Authenfication{
         }
         let title="서비스 이메일 확인"
         let {email,type}=this
-        let key = crypto.randomBytes(20).toString('hex')
+        let key = key? key:crypto.randomBytes(20).toString('hex')
         let auth = await models.Authenfication.create({
             type,email,key
         })
@@ -320,11 +322,28 @@ class Authenfication{
     }
 }
 
+async function different_ip(body){
+    let {email,ip}=body
+    let location =await api.ip_location(ip)
+    let x=location['coordinates']['latitude'],y=location['coordinates']['longitude']
+    location.map_image_url = kakao_map.kakao_map_image_url(x,y,5)
+    body=location
+    body.map_url=`https://map.kakao.com/link/map/${x},${y}`
+    new Email({
+        email:email,
+        form:"different_ip",
+        body
+    })
+    // new Email({
+
+    // })
+}
 module.exports={
     User,
     LocalUser,
     SocialUser,
     JWT,
     UserInfo,
-    Authenfication
+    Authenfication,
+    different_ip,
 }

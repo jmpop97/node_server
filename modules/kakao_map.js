@@ -85,11 +85,10 @@ function kakao_map_xyz(x,y,size){
     return [Math.floor(x2 / 256 * Math.pow(2,-size)),Math.floor(y2 / 256 *Math.pow(2,-size)),size]
 }
 
-function kakao_map_url(x,y,size){
+function kakao_map_image_url(x,y,size){
     let [_x,_y,_s]=kakao_map_xyz(x,y,size)
-    return `https://map.daumcdn.net/map_k3f_prod/bakery/image_map_png/PNG01/v29_9jh91/${_s}/${_y}/${_x}.png`
+    return `https://map.daumcdn.net/map_k3f_prod/bakery/image_map_png/PNG01/v29_9jh91/${_s}/${_y+1}/${_x+1}.png`
 }
-console.log(kakao_map_url(33.450701,126.570667,5))
 module.exports ={
-    kakao_map_url
+    kakao_map_image_url
 }

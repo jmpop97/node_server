@@ -8,28 +8,23 @@ const email=require('../modules/send_email')
 
 router.use("", async (req, res, next)=>{
   //log_in
-  let log_in_user = await new user.JWT().verify(req.headers.authorization)
-  req.log_in_user=log_in_user
+  req.log_in_user = await new user.JWT().verify(req.headers.authorization)
 
-  if (req.ip!=log_in_user.ip){
-    body={
-      email :log_in_user.email,
-      form :"different_ip",
-      body :{1:req.ip+""}
-    }
-    // new email.Email().send("ip_error")
+  if (req.ip!=req.log_in_user.ip){
+      req.ip=req.log_in_user.ip
+      user.different_ip(req.log_in_user)
     res.send(await error_message.get(31))
     return
   }
   // DB터질려고 한다./ 조정이 필요함
-  // add={ip:req.ip,
-  //     userId:log_in_user.id,
-  //     api:req.method+req.url}
+  add={
+      api:req.method+req.url
+    }
   // UserIPLog.create(add)
 
 
   //permission
-  if (add.api.slice(-1)=='/'){
+  if (add.api?.slice(-1)=='/'){
     add.api=add.api.slice(0,-1)
   }
   let bool_permission=await permission.PermissionAPICheck(add.api,log_in_user.auth)
