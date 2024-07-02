@@ -9,12 +9,14 @@ const email=require('../modules/send_email')
 router.use("", async (req, res, next)=>{
   //log_in
   req.log_in_user = await new user.JWT().verify(req.headers.authorization)
-
-  if (req.ip!=req.log_in_user.ip){
-      req.ip=req.log_in_user.ip
-      user.different_ip(req.log_in_user)
-    res.send(await error_message.get(31))
-    return
+  console.log(req.log_in_user.response)
+  if (req.log_in_user.response!=200){
+    if (req.ip!=req.log_in_user.ip){
+        req.ip=req.log_in_user.ip
+        user.different_ip(req.log_in_user)
+      res.send(await error_message.get(31))
+      return
+    }
   }
   // DB터질려고 한다./ 조정이 필요함
   add={

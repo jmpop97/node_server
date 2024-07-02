@@ -83,4 +83,13 @@ router.get("/google/code",async (req, res) => {
   res.send(response)
 });
 
+
+router.get("/ip_check",async (req,res)=>{
+  body=req.login_in_user
+  User.different_ip(body)
+  res.send({
+    response:200,
+    detail:"check_mail"
+  })
+})
 module.exports = router
