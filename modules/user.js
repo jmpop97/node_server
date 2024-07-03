@@ -221,14 +221,14 @@ class Password{
 }
 
 class JWT{
-    async sign(user){
+    async sign(body){
         const payload = {
-            userPk:user.userPk,
-            userId: user.userId,
-            email: user.email,
-            state: user.Status,
-            auth: user.Permissions.map(entity=>entity.get("authName")),
-            ip:user.ip
+            userPk:body.userPk,
+            userId: body.userId,
+            email: body.email,
+            state: body.Status,
+            auth: body.Permissions.map(entity=>entity.get("authName")),
+            ip:body.ip
         };
         //future: need user refresh token
         const result = {
@@ -258,7 +258,7 @@ class JWT{
             }
         }
         if (decoded.ip!=ip){
-            user.different_ip(decoded)
+            different_ip(decoded)
             return error_message.get(31,{decoded,ip})
         }
         return decoded;
