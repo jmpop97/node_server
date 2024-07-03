@@ -290,7 +290,7 @@ class Authenfication{
         }
         let title="서비스 이메일 확인"
         let {email,type}=this
-        let key = key? key:crypto.randomBytes(20).toString('hex')
+        let key = this.key? this.key:crypto.randomBytes(20).toString('hex')
         let auth = await models.Authenfication.create({
             type,email,key
         })
