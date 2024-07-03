@@ -25,8 +25,8 @@ router.use("", async (req, res, next)=>{
     next();
     }
   else if (bool_permission==false){
-    if (log_in_user.response){
-      return res.send(log_in_user)
+    if (req.log_in_user.response){
+      return res.send(req.log_in_user)
     }
     else{
       res.send(await error_message.get(19))
