@@ -34,6 +34,7 @@ router.use("", async (req, res, next)=>{
   }
   else{
     res.send(await error_message.get(20,add.api))
+    next();
   }
   });
 

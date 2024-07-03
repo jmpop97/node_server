@@ -8,7 +8,7 @@ async function PermissionAPICheck(api,user_perm){
     // return true
     perms=await permissionAPI.get(api)
     if (!perms){
-        return true
+        return undefined
     }
     if (perms[0]=='All'){
         return true
