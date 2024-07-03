@@ -237,7 +237,7 @@ class JWT{
         };
         return result;
     }
-    async verify(auth){
+    async verify(auth,ip){
         let [token,_]=["",""]
         if (auth){
              [_,token]=auth.split("Bearer ")
@@ -256,6 +256,10 @@ class JWT{
             } else{
                 return error_message.get(4,auth)
             }
+        }
+        if (decoded.ip!=ip){
+            user.different_ip(decoded)
+            return error_message.get(31,{decoded,ip})
         }
         return decoded;
     }

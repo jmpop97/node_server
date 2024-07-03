@@ -2,7 +2,7 @@ require('dotenv').config();
 const port_num=8000
 const express = require('express')
 const app = express()
-const all_apiRouter =require("./router/all_api")
+const all_api =require("./router/all_api")
 require('./modules/EternalReturn')
 
 app.get('/',(rep,res)=>{
@@ -11,7 +11,7 @@ app.get('/',(rep,res)=>{
 
 app.set('port',port_num)
 app.use(express.json())
-app.use('/', all_apiRouter);
+app.use('/', all_api);
 
 const fs = require('fs')
 const router_dir = __dirname+'/./router'
@@ -21,6 +21,7 @@ for(var i = 0; i < router_files.length; i++){
   var file = router_files[i];
   var suffix = file.split('.'); // 확장자 추출
   if (suffix[1] === 'js' && suffix[0]!='all_api'){
+    console.log(suffix[0])
       app.use('/'+suffix[0],require('./router/'+suffix[0]))
 }
 }
