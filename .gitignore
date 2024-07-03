@@ -4,3 +4,4 @@ venv
 config
 .env
 uploads
+test.js
