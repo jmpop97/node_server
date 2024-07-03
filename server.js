@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 const all_api =require("./router/all_api")
 require('./modules/EternalReturn')
+app.set('trust proxy',true)
 
 app.get('/',(rep,res)=>{
   res.send("hi")
