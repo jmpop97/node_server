@@ -89,5 +89,4 @@ class Email{
 }
 
 
-// console.log(email_forms['normal_form']('title').text())
 module.exports={Email}

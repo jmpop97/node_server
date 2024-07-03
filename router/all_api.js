@@ -9,8 +9,6 @@ const email=require('../modules/send_email')
 router.use("", async (req, res, next)=>{
   //log_in
   req.log_in_user = await new user.JWT().verify(req.headers.authorization,req.ip)
-  console.log(req.log_in_user)
-  console.log(req.ip)
   // DB터질려고 한다./ 조정이 필요함
   add={
       api:req.method+req.url

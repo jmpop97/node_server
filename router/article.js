@@ -35,7 +35,6 @@ router.post("",async (req,res)=>{
             tags:req.body.tags,
             images:[],
             permissions:['User']}
-            console.log(data)
         data.images=req.files?.map(x=>x.path)
         let article=await Article.createArticle(data);
         res.send(article)

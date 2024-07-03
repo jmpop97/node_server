@@ -32,6 +32,3 @@ async function rank_data_page(page){
     data=await get_data.json()
     return data
 }
-// const job2 = schedule.scheduleJob('00 20 * * *', function(){
-//     console.log('The answer to life, the universe, and everything2!');
-//   });

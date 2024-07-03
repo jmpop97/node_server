@@ -328,9 +328,7 @@ class Authenfication{
 
 async function different_ip(body){
     let {email,ip}=body
-    console.log(body)
     let location =await api.ip_location(ip)
-    console.log(location)
     let x=location['coordinates']['latitude'],y=location['coordinates']['longitude']
     location.map_image_url = kakao_map.kakao_map_image_url(x,y,5)
     body=location

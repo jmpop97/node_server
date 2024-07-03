@@ -74,7 +74,6 @@ c = 4066832
 n = Math.pow(2,-size)
 S=355
 O=500
-console.log(x,y,b,c,n)
 return [b + Math.floor((x - b) * n - S / 2) / n,c + Math.floor((y - c) * n - O / 2) / n]
 }
 
